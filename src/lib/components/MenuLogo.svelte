@@ -1,11 +1,11 @@
 <script>
-  import settingStore from "$lib/stores/setting.store";
+ 
 
-  $: setting = $settingStore.common;
+
 </script>
 
 <div class="logo">
-  <a href="/"> <img src={setting.logo} alt="Logo" /></a>
+  <a href="/"> <img src="/logo.png" alt="Logo" /></a>
 </div>
 
 <style lang="postcss">

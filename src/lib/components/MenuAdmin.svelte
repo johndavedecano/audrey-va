@@ -5,15 +5,22 @@
   import { SidebarStore } from "$lib/stores/sidebar.store";
 
   import {
+    IconApi,
     IconCalendar,
     IconCalendarCheck,
+    IconChartBubble,
+    IconCode,
     IconHome,
     IconLock,
     IconLogout,
+    IconMessage,
     IconNews,
+    IconPaint,
     IconSettings,
     IconSitemap,
     IconUser,
+    IconUsersGroup,
+    IconWallpaper,
   } from "@tabler/icons-svelte";
   import MenuLogo from "./MenuLogo.svelte";
 
@@ -44,41 +51,31 @@
   <li>
     <a
       on:click={onClick}
-      href="/admin/pages"
-      class:active={isActive("/admin/pages")}
+      href="/admin/chats"
+      class:active={isActive("/admin/chats")}
     >
-      <IconSitemap size={16} />
-      Manage Pages</a
-    >
-  </li>
-  <li>
-    <a
-      on:click={onClick}
-      href="/admin/posts"
-      class:active={isActive("/admin/posts")}
-    >
-      <IconNews size={16} />
-      Manage Posts</a
+      <IconMessage size={16} />
+      Chats</a
     >
   </li>
   <li>
     <a
       on:click={onClick}
-      href="/admin/appointments"
-      class:active={isActive("/admin/appointments")}
+      href="/admin/widgets"
+      class:active={isActive("/admin/widgets")}
     >
-      <IconCalendar size={16} />
-      Appointments</a
+      <IconWallpaper size={16} />
+      Widgets</a
     >
   </li>
   <li>
     <a
       on:click={onClick}
-      href="/admin/slots"
-      class:active={isActive("/admin/slots")}
+      href="/admin/groups"
+      class:active={isActive("/admin/groups")}
     >
-      <IconCalendarCheck size={16} />
-      Manage Slots</a
+      <IconUsersGroup size={16} />
+      Groups</a
     >
   </li>
   <li>
@@ -88,7 +85,7 @@
       class:active={isActive("/admin/users")}
     >
       <IconUser size={16} />
-      User Management</a
+      Users</a
     >
   </li>
   <li>
@@ -97,8 +94,8 @@
       href="/admin/settings"
       class:active={isActive("/admin/settings")}
     >
-      <IconSettings size={16} />
-      General Setting</a
+      <IconCode size={16} />
+      Integration</a
     >
   </li>
   <li>
@@ -108,7 +105,7 @@
       class:active={isActive("/admin/account")}
     >
       <IconLock size={16} />
-      Account Setting</a
+      Account</a
     >
   </li>
   <li>
