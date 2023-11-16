@@ -8,11 +8,8 @@ export async function POST({ request, cookies }) {
 
     const user = await auth.verifyIdToken(idToken);
 
-    const userRef = await db.collection("users").doc(user.uid).get();
-    const profile = userRef.data();
-
-    if (profile.deleted) {
-      throw new Error("user does not exists`");
+    if (!user.email_verified) {
+      throw new Error("account is not yet verified");
     }
 
     cookies.set("uid", user.uid, { path: "/" });

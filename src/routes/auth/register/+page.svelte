@@ -1,16 +1,9 @@
 <script>
   // @ts-nocheck
-
-  import { goto } from "$app/navigation";
+  import axios from "axios";
   import { auth } from "$lib/firebase";
-  import { isValidEmail, isValidMobile, isValidPassword } from "$lib/string";
-
-  import {
-    createUserWithEmailAndPassword,
-    sendEmailVerification,
-  } from "firebase/auth";
-
-  import isEmpty from "lodash/isEmpty.js";
+  import { sendEmailVerification, signInWithCustomToken } from "firebase/auth";
+  import { goto } from "$app/navigation";
 
   let loading = false;
 
@@ -20,79 +13,60 @@
     mobile: "",
     email: "",
     password: "",
+    password_confirmation: "",
+    organization: "",
   };
 
-  const onSubmit = () => {
-    if (isEmpty(fields.firstName)) {
-      alert("first name field is required");
-      return;
+  const onSubmit = async () => {
+    try {
+      loading = true;
+
+      const response = await axios
+        .post("/auth/register", {
+          email: fields.email,
+          mobile: fields.mobile,
+          firstName: fields.firstName,
+          lastName: fields.lastName,
+          organization: fields.organization,
+          password: fields.password,
+          password_confirmation: fields.password_confirmation,
+        })
+        .then((response) => response.data);
+
+      const token = response.data;
+
+      const userCredential = await signInWithCustomToken(auth, token);
+
+      const user = userCredential.user;
+
+      await sendEmailVerification(user);
+
+      alert(
+        "registration successful. please check your email " +
+          fields.email +
+          " to activate your account."
+      );
+
+      loading = false;
+
+      auth.signOut();
+
+      goto("/auth/login");
+    } catch (error) {
+      loading = false;
+      console.log(error.message);
+      if (error.response & error.response.data) {
+        alert(error.response.data.message);
+        return;
+      }
+      alert(error.message);
     }
-
-    if (isEmpty(fields.lastName)) {
-      alert("last name field is required");
-      return;
-    }
-
-    if (!isValidMobile(fields.mobile)) {
-      alert("Mobile number field is required");
-      return;
-    }
-
-    if (!isValidEmail(fields.email)) {
-      alert("Email address field is invalid");
-      return;
-    }
-
-    const password = isValidPassword(fields.password);
-
-    if (!password.success) {
-      alert(password.message);
-      return;
-    }
-
-    loading = true;
-
-    createUserWithEmailAndPassword(auth, fields.email, fields.password)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-
-        await sendEmailVerification(user);
-
-        const idToken = await user.getIdToken();
-
-        await fetch("/auth/register", {
-          method: "POST",
-          body: JSON.stringify({
-            idToken,
-            email: fields.email,
-            name: fields.name,
-            mobile: fields.mobile,
-            firstName: fields.firstName,
-            lastName: fields.lastName,
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
-        });
-
-        alert(
-          "registration successful. please check your email " +
-            fields.email +
-            " to activate your account."
-        );
-
-        goto("/auth/login");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        alert(`${errorCode}:${errorMessage}`);
-
-        loading = false;
-      });
   };
 </script>
+
+<svelte:head>
+  <title>Audrey VA - Registration</title>
+</svelte:head>
 
 <div class="login">
   <div class="card shadow-none lg:shadow-xl w-full">
@@ -103,7 +77,7 @@
           Please use the form below to create a new account
         </p>
       </div>
-      <form action="" on:submit|preventDefault={onSubmit}>
+      <form method="POST" on:submit|preventDefault={onSubmit}>
         <div class="flex gap-2 w-full mb-4">
           <div class="flex-1">
             <label for="name">
@@ -115,6 +89,7 @@
               placeholder="First Name"
               class="input input-bordered w-full"
               bind:value={fields.firstName}
+              required
             />
           </div>
           <div class="flex-1">
@@ -127,8 +102,22 @@
               placeholder="Last Name"
               class="input input-bordered w-full"
               bind:value={fields.lastName}
+              required
             />
           </div>
+        </div>
+
+        <div class="flex flex-col gap-2 w-full mb-4">
+          <label for="mobile_number">
+            <span class="label-text">Organization:</span>
+          </label>
+          <input
+            type="text"
+            name="organization"
+            class="input input-bordered w-full"
+            required
+            bind:value={fields.organization}
+          />
         </div>
 
         <div class="flex flex-col gap-2 w-full mb-4">
@@ -155,6 +144,7 @@
             type="email"
             placeholder="Email Address"
             class="input input-bordered w-full"
+            required
             bind:value={fields.email}
           />
         </div>
@@ -170,8 +160,20 @@
             bind:value={fields.password}
           />
         </div>
-        <button class="btn btn-primary w-full" type="submit" disabled={loading}
-          >Register</button
+
+        <div class="flex flex-col gap-2 w-full mb-4">
+          <label for="email">
+            <span class="label-text">Password Confirmation:</span>
+          </label>
+          <input
+            name="password_confirmation"
+            type="password"
+            class="input input-bordered w-full"
+            bind:value={fields.password_confirmation}
+          />
+        </div>
+        <button class="btn btn-primary w-full" type="submit" disabled={loading}>
+          Register</button
         >
       </form>
 

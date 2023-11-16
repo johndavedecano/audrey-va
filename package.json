@@ -30,10 +30,12 @@
     "firebase": "^10.5.2",
     "firebase-admin": "^11.11.0",
     "html2canvas": "^1.4.1",
+    "joi": "^17.11.0",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
-    "svelte-qrcode": "^1.0.0"
+    "svelte-qrcode": "^1.0.0",
+    "uuid": "^9.0.1"
   }
 }

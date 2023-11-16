@@ -10,8 +10,10 @@ export async function handle({ event, resolve }) {
     const uid = event.cookies.get("uid");
     const idToken = event.cookies.get("idToken");
     const pathname = event.url.pathname;
-    if (isEmpty(uid) || isEmpty(idToken)) {
-      return json({ message: "unauthenticated" }, { status: 401 });
+    if (!pathname.startsWith("/auth")) {
+      if (isEmpty(uid) || isEmpty(idToken)) {
+        return json({ message: "unauthenticated" }, { status: 401 });
+      }
     }
   }
 
