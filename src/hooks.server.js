@@ -1,10 +1,8 @@
 // @ts-nocheck
 import { json } from "@sveltejs/kit";
-import isEmpty from "lodash/isEmpty";
+import { isFetchRequest } from "$lib/server/request";
 
-const isFetchRequest = (headers) => {
-  return headers.get("content-type") === "application/json";
-};
+import isEmpty from "lodash/isEmpty";
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
