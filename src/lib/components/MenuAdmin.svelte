@@ -5,29 +5,22 @@
   import { SidebarStore } from "$lib/stores/sidebar.store";
 
   import {
-    IconApi,
-    IconCalendar,
-    IconCalendarCheck,
-    IconChartBubble,
     IconCode,
     IconHome,
     IconLock,
     IconLogout,
     IconMessage,
-    IconNews,
-    IconPaint,
-    IconSettings,
-    IconSitemap,
     IconUser,
     IconUsersGroup,
     IconWallpaper,
   } from "@tabler/icons-svelte";
+
   import MenuLogo from "./MenuLogo.svelte";
 
   $: isActive = (p) => {
     if ($page.url.pathname === p) return true;
 
-    return p !== "/admin" && String($page.url.pathname).startsWith(p);
+    return p !== "/" && String($page.url.pathname).startsWith(p);
   };
 
   const onClick = () => {
@@ -43,67 +36,47 @@
 
 <ul class="nav">
   <li>
-    <a on:click={onClick} href="/admin" class:active={isActive("/admin")}>
+    <a
+      on:click={onClick}
+      href="/dashboard"
+      class:active={isActive("/dashboard")}
+    >
       <IconHome size={16} />
       Dashboard</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/chats"
-      class:active={isActive("/admin/chats")}
-    >
+    <a on:click={onClick} href="/chats" class:active={isActive("/chats")}>
       <IconMessage size={16} />
       Chats</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/widgets"
-      class:active={isActive("/admin/widgets")}
-    >
+    <a on:click={onClick} href="/widgets" class:active={isActive("/widgets")}>
       <IconWallpaper size={16} />
       Widgets</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/groups"
-      class:active={isActive("/admin/groups")}
-    >
+    <a on:click={onClick} href="/groups" class:active={isActive("/groups")}>
       <IconUsersGroup size={16} />
       Groups</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/users"
-      class:active={isActive("/admin/users")}
-    >
+    <a on:click={onClick} href="/users" class:active={isActive("/users")}>
       <IconUser size={16} />
       Users</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/settings"
-      class:active={isActive("/admin/settings")}
-    >
+    <a on:click={onClick} href="/settings" class:active={isActive("/settings")}>
       <IconCode size={16} />
       Integration</a
     >
   </li>
   <li>
-    <a
-      on:click={onClick}
-      href="/admin/account"
-      class:active={isActive("/admin/account")}
-    >
+    <a on:click={onClick} href="/account" class:active={isActive("/account")}>
       <IconLock size={16} />
       Account</a
     >

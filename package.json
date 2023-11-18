@@ -35,6 +35,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
+    "svelte-portal": "^2.2.0",
     "svelte-qrcode": "^1.0.0",
     "uuid": "^9.0.1"
   }
