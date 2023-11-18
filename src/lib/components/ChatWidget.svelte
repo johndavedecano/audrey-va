@@ -64,36 +64,32 @@
         <div class="cw-message-list-inner">
           <div class="cw-message-wrapper">
             <div class="cw-message">
-              <p>
-                {values.welcome_message}
-              </p>
+              <form action="">
+                <p class="cw-welcome-message">
+                  {values.welcome_message}
+                </p>
+                <div class="cw-form-group">
+                  <input type="text" placeholder="Name" />
+                </div>
+
+                <div class="cw-form-group">
+                  <input type="email" placeholder="Email Address" />
+                </div>
+
+                {#if values.welcome_form.phone}
+                  <div class="cw-form-group">
+                    <input type="tel" placeholder="Phone Number" />
+                  </div>
+                {/if}
+
+                {#if values.welcome_form.message}
+                  <div class="cw-form-group">
+                    <textarea placeholder="Message or Question" />
+                  </div>
+                {/if}
+                <button class="cw-btn"> Start Chat </button>
+              </form>
             </div>
-            {#if values.enable_welcome_form}
-              <div class="cw-message">
-                <form action="">
-                  <div class="cw-form-group">
-                    <input type="text" placeholder="Name" />
-                  </div>
-
-                  <div class="cw-form-group">
-                    <input type="email" placeholder="Email Address" />
-                  </div>
-
-                  {#if values.welcome_form.phone.enabled}
-                    <div class="cw-form-group">
-                      <input type="tel" placeholder="Phone Number" />
-                    </div>
-                  {/if}
-
-                  {#if values.welcome_form.message.enabled}
-                    <div class="cw-form-group">
-                      <textarea placeholder="Message or Question" />
-                    </div>
-                  {/if}
-                  <button class="cw-btn"> Start Chat </button>
-                </form>
-              </div>
-            {/if}
           </div>
         </div>
       </div>
@@ -299,6 +295,10 @@
     border-radius: 5px;
     width: 100%;
     min-width: 280px;
-    padding: 5px 10px;
+    padding: 8px 12px;
+  }
+
+  .cw-welcome-message {
+    margin-bottom: 15px;
   }
 </style>

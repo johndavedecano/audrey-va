@@ -5,7 +5,8 @@
   import MenuAdmin from "$lib/components/MenuAdmin.svelte";
   import BrandName from "$lib/components/BrandName.svelte";
   import CurrentUser from "$lib/components/CurrentUser.svelte";
-
+  import Portal from "svelte-portal";
+  import { SvelteEasyToast } from "svelte-easy-toast";
   export let data;
 </script>
 
@@ -22,6 +23,10 @@
     <slot />
   </svelte:fragment>
 </Wrapper>
+
+<Portal>
+  <SvelteEasyToast />
+</Portal>
 
 <svelte:head>
   <title>Admin Portal</title>

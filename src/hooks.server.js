@@ -8,10 +8,9 @@ import isEmpty from "lodash/isEmpty";
 export async function handle({ event, resolve }) {
   if (isFetchRequest(event.request.headers)) {
     const uid = event.cookies.get("uid");
-    const idToken = event.cookies.get("idToken");
     const pathname = event.url.pathname;
     if (!pathname.startsWith("/auth")) {
-      if (isEmpty(uid) || isEmpty(idToken)) {
+      if (isEmpty(uid)) {
         return json({ message: "unauthenticated" }, { status: 401 });
       }
     }

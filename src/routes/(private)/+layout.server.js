@@ -29,8 +29,6 @@ export async function load({ cookies }) {
     },
   };
 
-  console.log(data);
-
   return data;
 }
 
