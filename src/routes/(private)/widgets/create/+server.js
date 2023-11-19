@@ -1,14 +1,12 @@
 // @ts-nocheck
-import { auth, db } from "$lib/server/firebase.js";
+import { db } from "$lib/server/firebase.js";
 import { json } from "@sveltejs/kit";
 
 import Joi from "joi";
 
-export async function POST({ request, cookies, locals }) {
+export async function POST({ request, cookies }) {
   try {
     const params = await request.json();
-
-    console.log(locals);
 
     const schema = Joi.object({
       name: Joi.string().required(),
@@ -37,6 +35,26 @@ export async function POST({ request, cookies, locals }) {
         }
       );
     }
+
+    const uid = cookies.get("uid");
+    const userRef = await db.collection("users").doc(uid).get();
+    const user = { ...userRef.data(), id: uid };
+    const organization = user.organization;
+
+    await db
+      .collection("organizations")
+      .doc(organization)
+      .collection("widgets")
+      .add({
+        name: params.name,
+        title: params.title,
+        color: params.color,
+        welcome_message: params.welcome_message,
+        bot_avatar_url: params.bot_avatar_url,
+        bot_name: params.bot_name,
+        dialogflow_project_id: params.dialogflow_project_id,
+        welcome_form: params.welcome_form,
+      });
 
     return json({
       success: true,
