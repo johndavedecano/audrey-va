@@ -5,11 +5,17 @@
   export let data;
 
   const loadScript = () => {
+    const url = "/widget/" + data.widget.organization + "?w=" + data.widget.id;
+    const color = data.widget.color;
+
     window.AUDREY_WIDGET_SETTINGS = {
-      color: data.widget.color,
-      url: "/widget/" + data.widget.organization + "?w=" + data.widget.id,
+      color,
+      url,
     };
     const script = document.createElement("script");
+    script.id = "cw-script";
+    script.setAttribute("data-color", color);
+    script.setAttribute("data-url", url);
     script.src = "/widget.js";
     script.async = true;
     document.head.appendChild(script);
