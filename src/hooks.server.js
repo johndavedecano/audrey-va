@@ -6,9 +6,18 @@ import isEmpty from "lodash/isEmpty";
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
+  let response;
+
+  const pathname = event.url.pathname;
+
+  if (pathname.startsWith("/widget")) {
+    response = await resolve(event);
+    return response;
+  }
+
   if (isFetchRequest(event.request.headers)) {
     const uid = event.cookies.get("uid");
-    const pathname = event.url.pathname;
+
     if (!pathname.startsWith("/auth")) {
       if (isEmpty(uid)) {
         return json({ message: "unauthenticated" }, { status: 401 });
@@ -16,7 +25,6 @@ export async function handle({ event, resolve }) {
     }
   }
 
-  const response = await resolve(event);
-
+  response = await resolve(event);
   return response;
 }
