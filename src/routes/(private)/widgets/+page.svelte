@@ -60,7 +60,25 @@
           {#each items as item}
             <!-- content here -->
             <tr>
-              <td>{item.name}</td>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="mask mask-squircle w-12 h-12">
+                      <img src={item.bot_avatar_url} alt={item.bot_name} />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{item.name}</div>
+                    <div class="text-sm opacity-50 flex items-center gap-4">
+                      {item.bot_name}
+                      <div
+                        class="badge badge-sm"
+                        style="background-color: {item.color};"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </td>
               <td class="text-right">
                 <div>
                   <button

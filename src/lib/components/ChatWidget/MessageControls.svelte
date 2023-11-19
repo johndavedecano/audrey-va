@@ -1,6 +1,6 @@
 <script>
   // @ts-nocheck
-  //   export let widget = {};
+  export let widget = {};
 </script>
 
 <div class="cw-controls">

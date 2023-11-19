@@ -49,6 +49,7 @@
     padding: 7.25px;
   }
 
+  .cw-form-group select,
   .cw-form-group input,
   .cw-form-group textarea {
     border: solid 1px #d8d8db;
@@ -56,6 +57,14 @@
     width: 100%;
     min-width: 280px;
     padding: 8px 12px;
+    outline: none;
+    transition: all 250ms ease-in-out;
+  }
+
+  .cw-form-group select:focus,
+  .cw-form-group input:focus,
+  .cw-form-group textarea:focus {
+    border-color: var(--primary-color);
   }
 
   .cw-welcome-message {

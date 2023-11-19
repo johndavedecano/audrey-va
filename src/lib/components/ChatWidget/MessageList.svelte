@@ -1,5 +1,5 @@
 <script>
-  export let widget = {};
+  // export let widget = {};
 </script>
 
 <div class="cw-message-list">
