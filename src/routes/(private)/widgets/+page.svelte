@@ -1,17 +1,19 @@
 <script>
   // @ts-nocheck
   import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
 
   import PageHead from "$lib/components/PageHead.svelte";
   import PageMain from "$lib/components/PageMain.svelte";
+
   import {
     IconEdit,
     IconEye,
     IconPaint,
     IconTrash,
   } from "@tabler/icons-svelte";
+
   import axios from "axios";
-  import { onMount } from "svelte";
 
   let items = [];
 
