@@ -13,7 +13,6 @@
     welcome_message: "Hello how can i help you today",
     bot_avatar_url: "https://mighty.tools/mockmind-api/content/cartoon/29.jpg",
     bot_name: "Audrey",
-    dialogflow_project_id: "",
     welcome_form: {
       phone: true,
       message: true,
@@ -74,19 +73,6 @@
               type="text"
               class="input input-bordered w-full"
               bind:value={values.title}
-              required
-            />
-          </div>
-
-          <div class="form-control w-full">
-            <label class="label" for="dialogflow_project_id">
-              Dialogflow ProjectID
-            </label>
-            <input
-              name="dialogflow_project_id"
-              type="text"
-              class="input input-bordered w-full"
-              bind:value={values.dialogflow_project_id}
               required
             />
           </div>

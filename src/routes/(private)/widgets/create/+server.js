@@ -15,7 +15,6 @@ export async function POST({ request, cookies }) {
       welcome_message: Joi.string().required(),
       bot_avatar_url: Joi.string().uri().required(),
       bot_name: Joi.string().required(),
-      dialogflow_project_id: Joi.string().required(),
       welcome_form: Joi.object({
         phone: Joi.boolean().required(),
         message: Joi.boolean().required(),
@@ -52,13 +51,12 @@ export async function POST({ request, cookies }) {
         welcome_message: params.welcome_message,
         bot_avatar_url: params.bot_avatar_url,
         bot_name: params.bot_name,
-        dialogflow_project_id: params.dialogflow_project_id,
         welcome_form: params.welcome_form,
       });
 
     return json({
       success: true,
-      message: "successfully logged in",
+      message: "successfully created",
     });
   } catch (error) {
     return json(

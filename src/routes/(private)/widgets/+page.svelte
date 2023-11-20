@@ -7,9 +7,12 @@
   import PageMain from "$lib/components/PageMain.svelte";
 
   import {
+    IconBrandGoogle,
+    IconCode,
     IconEdit,
     IconEye,
     IconPaint,
+    IconPlug,
     IconTrash,
   } from "@tabler/icons-svelte";
 
@@ -31,12 +34,23 @@
       });
   };
 
-  const onEdit = () => {};
+  const onEdit = (item) => {
+    goto("/widgets/" + item.id + "/edit");
+  };
 
-  const onDelete = () => {};
+  const onDelete = () => {
+    const conf = window.confirm("are you sure you want to delete this widget?");
+    if (conf) {
+      // TODO:
+    }
+  };
 
   const onView = (item) => {
     goto(`/widget?o=${item.org}&w=${item.id}`);
+  };
+
+  const onIntegrate = (item) => {
+    goto("/widgets/" + item.id + "/dialogflow");
   };
 
   onMount(() => loadItems());
@@ -88,6 +102,12 @@
                     on:click={() => onView(item)}
                   >
                     <IconEye size={16} />
+                  </button>
+                  <button
+                    class="btn btn-warning btn-square text-white"
+                    on:click={() => onIntegrate(item)}
+                  >
+                    <IconPlug size={16} />
                   </button>
                   <button
                     class="btn btn-primary btn-square"
