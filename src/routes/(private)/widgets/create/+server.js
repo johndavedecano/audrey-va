@@ -6,7 +6,7 @@ import Joi from "joi";
 
 export async function POST({ request, cookies }) {
   try {
-    const params = await request.json();
+    const body = await request.json();
 
     const schema = Joi.object({
       name: Joi.string().required(),
@@ -21,7 +21,7 @@ export async function POST({ request, cookies }) {
       }),
     });
 
-    const validate = schema.validate(params);
+    const validate = schema.validate(body);
 
     if (validate.error) {
       return json(
@@ -45,13 +45,13 @@ export async function POST({ request, cookies }) {
       .doc(organization)
       .collection("widgets")
       .add({
-        name: params.name,
-        title: params.title,
-        color: params.color,
-        welcome_message: params.welcome_message,
-        bot_avatar_url: params.bot_avatar_url,
-        bot_name: params.bot_name,
-        welcome_form: params.welcome_form,
+        name: body.name,
+        title: body.title,
+        color: body.color,
+        welcome_message: body.welcome_message,
+        bot_avatar_url: body.bot_avatar_url,
+        bot_name: body.bot_name,
+        welcome_form: body.welcome_form,
       });
 
     return json({

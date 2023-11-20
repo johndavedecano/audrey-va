@@ -15,13 +15,18 @@ export async function GET({ cookies }) {
       .collection("widgets")
       .get();
 
-    const widgets = widgetRef.docs.map((v) => {
-      return {
-        id: v.id,
-        org: organization,
-        ...v.data(),
-      };
-    });
+    const widgets = widgetRef.docs
+      .map((v) => {
+        return {
+          id: v.id,
+          org: organization,
+          ...v.data(),
+          dialogflow_project_id: undefined,
+          dialogflow_private_key: undefined,
+          dialogflow_client_email: undefined,
+        };
+      })
+      .filter((v) => v.deleted !== true);
 
     return json({
       success: true,

@@ -27,7 +27,6 @@
       .get("/widgets/all")
       .then((response) => {
         items = response.data.data;
-        console.log(items);
       })
       .catch((error) => {
         alert(error.message);
@@ -38,10 +37,11 @@
     goto("/widgets/" + item.id + "/edit");
   };
 
-  const onDelete = () => {
+  const onDelete = async (item) => {
     const conf = window.confirm("are you sure you want to delete this widget?");
     if (conf) {
-      // TODO:
+      await axios.delete("/widgets/" + item.id + "/edit");
+      loadItems();
     }
   };
 
