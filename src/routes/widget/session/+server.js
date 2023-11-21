@@ -1,14 +1,10 @@
 // @ts-nocheck
 
-import { db } from "$lib/server/firebase.js";
+import { auth, db } from "$lib/server/firebase.js";
 import { error, json } from "@sveltejs/kit";
-import { JWT_SIGNATURE } from "$env/static/private";
 import { v4 } from "uuid";
-
 import firestore from "firebase-admin/firestore";
 import Joi from "joi";
-import jwt from "jsonwebtoken";
-import moment from "moment";
 import dialogflow from "dialogflow";
 
 export async function POST({ request }) {
@@ -54,14 +50,14 @@ export async function POST({ request }) {
 
     const widget = { id: widgetRef.id, ...widgetRef.data() };
 
-    const sessionId = v4();
+    const session_id = v4();
 
     const message = {
       author: "user",
       username: body.name,
       text: body.message,
       timestamp: firestore.FieldValue.serverTimestamp(),
-      sessionId,
+      session_id,
     };
 
     const customer = v4();
@@ -79,34 +75,22 @@ export async function POST({ request }) {
         created_at: firestore.FieldValue.serverTimestamp(),
       });
 
-    const token = jwt.sign(
-      {
-        widget: body.widget,
-        organization: body.organization,
-        customer: customer,
-        sessionId,
-      },
-      JWT_SIGNATURE,
-      {
-        expiresIn: "1d",
-      }
-    );
+    const token = await auth.createCustomToken(customer, {
+      session_id: session_id,
+      organization_id: widget.organization,
+      widget_id: widget.id,
+    });
 
-    await db
-      .collection("sessions")
-      .doc(sessionId)
-      .set({
-        current_target: "va",
-        widget: body.widget,
-        organization: body.organization,
-        customer: customer,
-        updated_at: firestore.FieldValue.serverTimestamp(),
-        created_at: firestore.FieldValue.serverTimestamp(),
-        last_message_at: firestore.FieldValue.serverTimestamp(),
-        last_message: message,
-        token,
-        token_expires_at: moment().add(24, "hours").unix(),
-      });
+    await db.collection("sessions").doc(session_id).set({
+      current_target: "va",
+      widget_id: body.widget,
+      organization_id: body.organization,
+      customer_id: customer,
+      updated_at: firestore.FieldValue.serverTimestamp(),
+      created_at: firestore.FieldValue.serverTimestamp(),
+      last_message_at: firestore.FieldValue.serverTimestamp(),
+      last_message: message,
+    });
 
     await db
       .collection("organizations")
@@ -126,14 +110,14 @@ export async function POST({ request }) {
 
     const sessionPath = sessionClient.sessionPath(
       widget.dialogflow_project_id,
-      sessionId
+      session_id
     );
 
     const request = {
       session: sessionPath,
       queryInput: {
         text: {
-          text: body.message,
+          text: body.message || "welcome_customer",
           languageCode: "en-US",
         },
       },
@@ -149,7 +133,7 @@ export async function POST({ request }) {
       username: widget.bot_name,
       text: result,
       timestamp: firestore.FieldValue.serverTimestamp(),
-      sessionId,
+      session_id,
     };
 
     await db
@@ -158,14 +142,17 @@ export async function POST({ request }) {
       .collection("messages")
       .add(response);
 
+    const messages = [message, response];
+
     return json({
       success: true,
       message: "successfully created",
       data: {
-        message,
-        response,
+        messages,
         token,
-        sessionId,
+        session_id,
+        widget_id: body.widget,
+        organization_id: body.organization,
       },
     });
   } catch (error) {
