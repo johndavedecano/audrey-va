@@ -1,14 +1,21 @@
 <script>
   // @ts-nocheck
+  import { auth } from "$lib/firebase";
+
   export let widget = {};
 
   const onMinimize = () => {
     window.parent.postMessage("cw-minimize");
   };
+
+  const logout = () => auth.signOut();
 </script>
 
 <div class="cw-header">
-  <div class="cw-avatar">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore missing-declaration -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="cw-avatar" on:click={logout}>
     {#if widget.bot_avatar_url}
       <img src={widget.bot_avatar_url} alt="" />
     {:else}

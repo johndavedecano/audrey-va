@@ -4,6 +4,8 @@
 
   export let widget = {};
 
+  export let loading = false;
+
   let values = {
     email: "johndavedecano@gmail.com",
     phone: "+639204809825",
@@ -23,7 +25,13 @@
     {widget.welcome_message}
   </p>
   <div class="cw-form-group">
-    <input type="text" placeholder="Name" required bind:value={values.name} />
+    <input
+      type="text"
+      placeholder="Name"
+      required
+      bind:value={values.name}
+      disabled={loading}
+    />
   </div>
 
   <div class="cw-form-group">
@@ -32,6 +40,7 @@
       placeholder="Email Address"
       required
       bind:value={values.email}
+      disabled={loading}
     />
   </div>
 
@@ -42,6 +51,7 @@
         placeholder="Phone Number"
         required
         bind:value={values.phone}
+        disabled={loading}
       />
     </div>
   {/if}
@@ -52,10 +62,13 @@
         placeholder="Message or Question"
         required
         bind:value={values.message}
+        disabled={loading}
       />
     </div>
   {/if}
-  <button class="cw-btn"> Start Chat </button>
+  <button class="cw-btn" disabled={loading}>
+    {loading ? "Please Wait..." : "Start Conversation"}
+  </button>
 </form>
 
 <style>

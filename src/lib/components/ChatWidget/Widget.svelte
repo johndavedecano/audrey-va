@@ -8,18 +8,20 @@
   import MessageControls from "./MessageControls.svelte";
   import Message from "./Message.svelte";
   import WelcomeForm from "./WelcomeForm.svelte";
-  import isEmpty from "lodash/isEmpty";
   import axios from "axios";
-  import get from "lodash/get";
+
   import { errorMessage } from "$lib/string";
+  import { auth } from "$lib/firebase";
+  import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
+  import { onLog } from "firebase/app";
 
   export let widget = {};
-
-  let sessionId = localStorage.getItem("sessionId");
 
   let loading = false;
 
   let messages = [];
+
+  let isLoggedIn = false;
 
   const startSession = async (evt) => {
     try {
@@ -38,7 +40,13 @@
 
       const response = await axios.post("/widget/session", params);
 
-      console.log(response.data);
+      const data = response.data.data;
+
+      await signInWithCustomToken(auth, data.token);
+
+      localStorage.setItem("session_id", data.session_id);
+
+      isLoggedIn = true;
 
       loading = false;
     } catch (error) {
@@ -50,18 +58,34 @@
     }
   };
 
-  const checkSession = () => {};
-
-  const endSession = () => {};
-
-  const clearSession = () => {};
-
   $: variables = `--primary-color: ${widget.color};`;
 
-  $: hasSession = !isEmpty(sessionId);
+  $: console.log(isLoggedIn);
+
+  $: console.log(messages);
+
+  const setMessageListener = () => {};
+
+  const onLogout = () => {
+    isLoggedIn = false;
+    localStorage.removeItem("session_id");
+    console.log("logged out");
+  };
+
+  const onLoggedIn = () => {
+    isLoggedIn = true;
+    setMessageListener();
+  };
 
   onMount(() => {
-    if (hasSession) checkSession();
+    onAuthStateChanged(auth, (user) => {
+      const sessionId = localStorage.getItem("session_id");
+      if (user && sessionId) {
+        onLoggedIn();
+      } else {
+        onLogout();
+      }
+    });
   });
 </script>
 
@@ -69,13 +93,13 @@
   <div class="cw" style={variables}>
     <Header {widget} />
     <MessageList>
-      {#if !hasSession}
+      {#if !isLoggedIn}
         <Message>
-          <WelcomeForm {widget} on:submit={startSession} />
+          <WelcomeForm {widget} on:submit={startSession} {loading} />
         </Message>
       {/if}
     </MessageList>
-    {#if hasSession}
+    {#if isLoggedIn}
       <MessageControls {widget} />
     {/if}
   </div>

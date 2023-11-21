@@ -7,7 +7,6 @@ import firestore from "firebase-admin/firestore";
 import Joi from "joi";
 import dialogflow from "dialogflow";
 import isEmpty from "lodash/isEmpty.js";
-import moment from "moment";
 
 export async function POST({ request }) {
   try {
@@ -80,7 +79,6 @@ export async function POST({ request }) {
       });
 
     const token = await auth.createCustomToken(customer, {
-      session_id: session_id,
       organization_id: widget.organization,
       widget_id: widget.id,
     });
@@ -97,8 +95,8 @@ export async function POST({ request }) {
     });
 
     await db
-      .collection("organizations")
-      .doc(body.organization_id)
+      .collection("sessions")
+      .doc(session_id)
       .collection("messages")
       .add(message);
 
@@ -148,18 +146,15 @@ export async function POST({ request }) {
     };
 
     await db
-      .collection("organizations")
-      .doc(body.organization_id)
+      .collection("sessions")
+      .doc(session_id)
       .collection("messages")
       .add(response);
-
-    const messages = [message, response];
 
     return json({
       success: true,
       message: "successfully created",
       data: {
-        messages,
         token,
         session_id,
         widget_id: body.widget_id,
