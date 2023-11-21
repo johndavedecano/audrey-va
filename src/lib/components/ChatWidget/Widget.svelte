@@ -10,6 +10,8 @@
   import WelcomeForm from "./WelcomeForm.svelte";
   import isEmpty from "lodash/isEmpty";
   import axios from "axios";
+  import get from "lodash/get";
+  import { errorMessage } from "$lib/string";
 
   export let widget = {};
 
@@ -23,10 +25,15 @@
     try {
       loading = true;
 
+      const customer = evt.detail;
+
       const params = {
-        organization: widget.organization,
-        widget: widget.id,
-        customer: evt.details,
+        email: customer.email,
+        phone: customer.phone,
+        name: customer.name,
+        message: customer.message,
+        organization_id: widget.organization,
+        widget_id: widget.id,
       };
 
       const response = await axios.post("/widget/session", params);
@@ -36,11 +43,10 @@
       loading = false;
     } catch (error) {
       loading = false;
-      if (error.response & error.response.data) {
-        alert(error.response.data.message);
-        return;
-      }
-      alert(error.message);
+
+      console.error(error);
+
+      alert(errorMessage(error));
     }
   };
 

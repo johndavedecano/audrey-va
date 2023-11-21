@@ -6,6 +6,8 @@ import { v4 } from "uuid";
 import firestore from "firebase-admin/firestore";
 import Joi from "joi";
 import dialogflow from "dialogflow";
+import isEmpty from "lodash/isEmpty.js";
+import moment from "moment";
 
 export async function POST({ request }) {
   try {
@@ -16,8 +18,8 @@ export async function POST({ request }) {
       phone: Joi.string().required(),
       name: Joi.string().required(),
       message: Joi.string().required(),
-      organization: Joi.string().required(),
-      widget: Joi.string().required(),
+      organization_id: Joi.string().required(),
+      widget_id: Joi.string().required(),
     });
 
     const validate = schema.validate(body);
@@ -37,9 +39,9 @@ export async function POST({ request }) {
     // validate widget and organization existence
     const widgetRef = await db
       .collection("organizations")
-      .doc(body.organization)
+      .doc(body.organization_id)
       .collection("widgets")
-      .doc(body.widget)
+      .doc(body.widget_id)
       .get();
 
     if (!widgetRef.exists) {
@@ -49,6 +51,8 @@ export async function POST({ request }) {
     }
 
     const widget = { id: widgetRef.id, ...widgetRef.data() };
+
+    if (widget.deleted) throw error(400, "widget has already been archived");
 
     const session_id = v4();
 
@@ -64,7 +68,7 @@ export async function POST({ request }) {
 
     await db
       .collection("organizations")
-      .doc(body.organization)
+      .doc(body.organization_id)
       .collection("customers")
       .doc(customer)
       .set({
@@ -83,8 +87,8 @@ export async function POST({ request }) {
 
     await db.collection("sessions").doc(session_id).set({
       current_target: "va",
-      widget_id: body.widget,
-      organization_id: body.organization,
+      widget_id: body.widget_id,
+      organization_id: body.organization_id,
       customer_id: customer,
       updated_at: firestore.FieldValue.serverTimestamp(),
       created_at: firestore.FieldValue.serverTimestamp(),
@@ -94,13 +98,21 @@ export async function POST({ request }) {
 
     await db
       .collection("organizations")
-      .doc(body.organization)
+      .doc(body.organization_id)
       .collection("messages")
       .add(message);
 
+    if (
+      isEmpty(widget.dialogflow_client_email) ||
+      isEmpty(widget.dialogflow_private_key) ||
+      isEmpty(widget.dialogflow_project_id)
+    ) {
+      throw error(400, "invalid dialogflow credentials");
+    }
+
     const credentials = {
       client_email: widget.dialogflow_client_email,
-      private_key: JSON.parse(widget.dialogflow_private_key),
+      private_key: widget.dialogflow_private_key.replace(/\\n/g, "\n"),
     };
 
     const sessionClient = new dialogflow.SessionsClient({
@@ -113,7 +125,7 @@ export async function POST({ request }) {
       session_id
     );
 
-    const request = {
+    const responses = await sessionClient.detectIntent({
       session: sessionPath,
       queryInput: {
         text: {
@@ -121,9 +133,8 @@ export async function POST({ request }) {
           languageCode: "en-US",
         },
       },
-    };
+    });
 
-    const responses = await sessionClient.detectIntent(request);
     const result = responses[0].queryResult.fulfillmentText;
 
     if (!result) throw error(400, "no matched intent");
@@ -138,7 +149,7 @@ export async function POST({ request }) {
 
     await db
       .collection("organizations")
-      .doc(body.organization)
+      .doc(body.organization_id)
       .collection("messages")
       .add(response);
 
@@ -151,11 +162,12 @@ export async function POST({ request }) {
         messages,
         token,
         session_id,
-        widget_id: body.widget,
-        organization_id: body.organization,
+        widget_id: body.widget_id,
+        organization_id: body.organization_id,
       },
     });
   } catch (error) {
+    console.error(error);
     return json(
       {
         success: false,

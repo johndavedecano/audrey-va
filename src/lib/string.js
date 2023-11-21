@@ -1,4 +1,6 @@
 // @ts-nocheck
+import get from "lodash/get";
+
 export function isValidEmail(email) {
   // Regular expression for validating an Email
   var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,4 +77,8 @@ export function formatNumberWithK(number) {
 
 export function getQrUrl(id) {
   return `${window.location.protocol}://${window.location.host}/admin/appointments/${id}`;
+}
+
+export function errorMessage(error) {
+  return get(error, "response.data.message") || error.message;
 }

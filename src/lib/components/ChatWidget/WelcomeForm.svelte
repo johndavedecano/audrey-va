@@ -4,7 +4,12 @@
 
   export let widget = {};
 
-  let values = {};
+  let values = {
+    email: "johndavedecano@gmail.com",
+    phone: "+639204809825",
+    name: "John Dave Decano",
+    message: "welcome_message",
+  };
 
   const dispatch = createEventDispatcher("submit", values);
 
@@ -13,7 +18,7 @@
   };
 </script>
 
-<form action="" on:submit={onSubmit}>
+<form action="" on:submit|preventDefault={onSubmit}>
   <p class="cw-welcome-message">
     {widget.welcome_message}
   </p>
