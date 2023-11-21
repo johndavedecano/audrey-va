@@ -27,10 +27,12 @@
   "dependencies": {
     "@tabler/icons-svelte": "^2.40.0",
     "axios": "^1.6.2",
+    "dialogflow": "^1.2.0",
     "firebase": "^10.5.2",
     "firebase-admin": "^11.11.0",
     "html2canvas": "^1.4.1",
     "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
