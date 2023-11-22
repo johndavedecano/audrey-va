@@ -1,6 +1,6 @@
 <script>
   // @ts-nocheck
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   import Portal from "svelte-portal";
   import Header from "./Header.svelte";
@@ -13,14 +13,17 @@
   import { errorMessage } from "$lib/string";
   import { auth } from "$lib/firebase";
   import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
+  import widgetStore from "$lib/stores/widget.store";
 
   export let widget = {};
 
   let loading = false;
 
-  let messages = [];
-
   let isLoggedIn = false;
+
+  $: session = $widgetStore.session;
+
+  $: messages = $widgetStore.messages;
 
   const startSession = async (evt) => {
     try {
@@ -59,17 +62,34 @@
 
   $: variables = `--primary-color: ${widget.color};`;
 
-  const setMessageListener = () => {};
+  const onMessageUpdate = (type) => console.log(type);
+
+  const onSessionUpdate = (type) => console.log(type);
+
+  const setListeners = () => {
+    const sessionId = localStorage.getItem("session_id");
+    widgetStore.addMessageListener(sessionId, onMessageUpdate);
+    widgetStore.addSessionListener(sessionId, onSessionUpdate);
+  };
+
+  const removeListeners = () => {
+    widgetStore.removeMessageListener();
+    widgetStore.removeSessionListener();
+  };
 
   const onLogout = () => {
     isLoggedIn = false;
+
     localStorage.removeItem("session_id");
+
+    removeListeners();
+
     console.log("logged out");
   };
 
   const onLoggedIn = () => {
     isLoggedIn = true;
-    setMessageListener();
+    setListeners();
   };
 
   onMount(() => {
@@ -82,6 +102,10 @@
       }
     });
   });
+
+  onDestroy(() => {
+    removeListeners();
+  });
 </script>
 
 <Portal target="body">
@@ -92,6 +116,13 @@
         <Message>
           <WelcomeForm {widget} on:submit={startSession} {loading} />
         </Message>
+      {:else}
+        {#each messages as message}
+          <!-- content here -->
+          <Message>
+            {message.text}
+          </Message>
+        {/each}
       {/if}
     </MessageList>
     {#if isLoggedIn}
