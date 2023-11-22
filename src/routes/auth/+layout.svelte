@@ -1,5 +1,6 @@
 <script>
   // @ts-nocheck
+  import "./../../app.css";
 </script>
 
 <div class="wrapper">

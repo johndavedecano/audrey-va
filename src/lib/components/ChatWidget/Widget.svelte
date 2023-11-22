@@ -13,7 +13,6 @@
   import { errorMessage } from "$lib/string";
   import { auth } from "$lib/firebase";
   import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
-  import { onLog } from "firebase/app";
 
   export let widget = {};
 
@@ -59,10 +58,6 @@
   };
 
   $: variables = `--primary-color: ${widget.color};`;
-
-  $: console.log(isLoggedIn);
-
-  $: console.log(messages);
 
   const setMessageListener = () => {};
 

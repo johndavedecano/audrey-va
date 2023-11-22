@@ -1,4 +1,6 @@
 <script>
+  import "./../../app.css";
+
   import Header from "$lib/components/Header.svelte";
   import Sidebar from "$lib/components/Sidebar.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
@@ -30,4 +32,8 @@
 
 <svelte:head>
   <title>Admin Portal</title>
+
+  <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+  <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet" />
 </svelte:head>
