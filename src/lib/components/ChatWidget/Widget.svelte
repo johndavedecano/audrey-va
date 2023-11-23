@@ -2,28 +2,25 @@
   // @ts-nocheck
   import { onDestroy, onMount } from "svelte";
 
-  import Portal from "svelte-portal";
-  import Header from "./Header.svelte";
-  import MessageList from "./MessageList.svelte";
-  import MessageControls from "./MessageControls.svelte";
-  import Message from "./Message.svelte";
-  import WelcomeForm from "./WelcomeForm.svelte";
   import axios from "axios";
+  import Header from "./Header.svelte";
+  import Message from "./Message.svelte";
+  import MessageControls from "./MessageControls.svelte";
+  import MessageList from "./MessageList.svelte";
+  import Portal from "svelte-portal";
+  import WelcomeForm from "./WelcomeForm.svelte";
+  import widgetStore from "$lib/stores/widget.store";
+  import sortBy from "lodash/sortBy";
 
   import { errorMessage } from "$lib/string";
   import { auth } from "$lib/firebase";
   import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
-  import widgetStore from "$lib/stores/widget.store";
 
   export let widget = {};
 
   let loading = false;
 
   let isLoggedIn = false;
-
-  $: session = $widgetStore.session;
-
-  $: messages = $widgetStore.messages;
 
   const startSession = async (evt) => {
     try {
@@ -92,6 +89,19 @@
     setListeners();
   };
 
+  const getMessages = (items) => {
+    return sortBy(
+      Object.keys(items).map((key) => {
+        return items[key];
+      }),
+      (obj) => obj.timestamp.seconds
+    );
+  };
+
+  $: session = $widgetStore.session;
+
+  $: messages = getMessages($widgetStore.messages);
+
   onMount(() => {
     onAuthStateChanged(auth, (user) => {
       const sessionId = localStorage.getItem("session_id");
@@ -113,15 +123,10 @@
     <Header {widget} />
     <MessageList>
       {#if !isLoggedIn}
-        <Message>
-          <WelcomeForm {widget} on:submit={startSession} {loading} />
-        </Message>
+        <WelcomeForm {widget} on:submit={startSession} {loading} />
       {:else}
         {#each messages as message}
-          <!-- content here -->
-          <Message>
-            {message.text}
-          </Message>
+          <Message {message} {widget} />
         {/each}
       {/if}
     </MessageList>

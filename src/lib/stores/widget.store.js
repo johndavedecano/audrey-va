@@ -1,9 +1,10 @@
 // @ts-nocheck
 import { createMessageListener, createSessionListener } from "$lib/chat";
 import { writable } from "svelte/store";
+import omit from "lodash/omit";
 
 const WidgetStore = () => {
-  const store = writable({ session: {}, messages: [] });
+  const store = writable({ session: {}, messages: {} });
 
   let messageSubscriber, sessionSubscriber;
 
@@ -15,7 +16,7 @@ const WidgetStore = () => {
           store.update((state) => {
             return {
               ...state,
-              messages: [...state.messages, message],
+              messages: { ...state.messages, [message.id]: message },
             };
           });
         }
@@ -24,14 +25,10 @@ const WidgetStore = () => {
           store.update((state) => {
             return {
               ...state,
-              messages: state.messages.map((msg) => {
-                if (msg.id === change.doc.id) {
-                  msg = {
-                    ...msg,
-                    ...change.doc.data(),
-                  };
-                }
-              }),
+              messages: {
+                ...state.messages,
+                [change.doc.id]: change.doc.data(),
+              },
             };
           });
         }
@@ -40,7 +37,7 @@ const WidgetStore = () => {
           store.update((state) => {
             return {
               ...state,
-              messages: state.messages.filter(msg.id !== change.doc.id),
+              messages: omit(state.messages, change.doc.id),
             };
           });
         }

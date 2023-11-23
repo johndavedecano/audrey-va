@@ -20,58 +20,73 @@
   };
 </script>
 
-<form action="" on:submit|preventDefault={onSubmit}>
-  <p class="cw-welcome-message">
-    {widget.welcome_message}
-  </p>
-  <div class="cw-form-group">
-    <input
-      type="text"
-      placeholder="Name"
-      required
-      bind:value={values.name}
-      disabled={loading}
-    />
+<div class="cw-message-form-wrapper">
+  <div class="cw-message-form">
+    <form action="" on:submit|preventDefault={onSubmit}>
+      <p class="cw-welcome-message">
+        {widget.welcome_message}
+      </p>
+      <div class="cw-form-group">
+        <input
+          type="text"
+          placeholder="Name"
+          required
+          bind:value={values.name}
+          disabled={loading}
+        />
+      </div>
+
+      <div class="cw-form-group">
+        <input
+          type="email"
+          placeholder="Email Address"
+          required
+          bind:value={values.email}
+          disabled={loading}
+        />
+      </div>
+
+      {#if widget.welcome_form.phone}
+        <div class="cw-form-group">
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            required
+            bind:value={values.phone}
+            disabled={loading}
+          />
+        </div>
+      {/if}
+
+      {#if widget.welcome_form.message}
+        <div class="cw-form-group">
+          <textarea
+            placeholder="Message or Question"
+            required
+            bind:value={values.message}
+            disabled={loading}
+          />
+        </div>
+      {/if}
+      <button class="cw-btn" disabled={loading}>
+        {loading ? "Please Wait..." : "Start Conversation"}
+      </button>
+    </form>
   </div>
-
-  <div class="cw-form-group">
-    <input
-      type="email"
-      placeholder="Email Address"
-      required
-      bind:value={values.email}
-      disabled={loading}
-    />
-  </div>
-
-  {#if widget.welcome_form.phone}
-    <div class="cw-form-group">
-      <input
-        type="tel"
-        placeholder="Phone Number"
-        required
-        bind:value={values.phone}
-        disabled={loading}
-      />
-    </div>
-  {/if}
-
-  {#if widget.welcome_form.message}
-    <div class="cw-form-group">
-      <textarea
-        placeholder="Message or Question"
-        required
-        bind:value={values.message}
-        disabled={loading}
-      />
-    </div>
-  {/if}
-  <button class="cw-btn" disabled={loading}>
-    {loading ? "Please Wait..." : "Start Conversation"}
-  </button>
-</form>
+</div>
 
 <style>
+  .cw-message-form-wrapper {
+    width: 100%;
+  }
+
+  .cw-message-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.813rem;
+  }
+
   .cw-form-group {
     display: flex;
     flex-direction: column;
