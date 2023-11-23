@@ -76,22 +76,6 @@
       <div class="cw-message">
         {message.text}
       </div>
-      <div class="cw-message">
-        Reference site about Lorem Ipsum, giving information on its origins, as
-        well as a random Lipsum generator.
-      </div>
-      <div class="cw-message">
-        Reference site about Lorem Ipsum, giving information on its origins, as
-        well as a random Lipsum generator.
-      </div>
-      <div class="cw-message">
-        Reference site about Lorem Ipsum, giving information on its origins, as
-        well as a random Lipsum generator.
-      </div>
-      <div class="cw-message">
-        Reference site about Lorem Ipsum, giving information on its origins, as
-        well as a random Lipsum generator.
-      </div>
     {/if}
   </div>
 </div>
