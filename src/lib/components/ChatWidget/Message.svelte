@@ -1,10 +1,9 @@
 <script>
   // @ts-nocheck
   import moment from "moment";
+  import { onDestroy, onMount } from "svelte";
 
   export let widget = {};
-
-  export let session = {};
 
   export let message = {
     author: "",
@@ -14,6 +13,9 @@
     timestamp: "",
     session_id: "",
   };
+
+  let timestamp;
+  let timestamp_interval;
 
   const getAvatarUrl = () => {
     if (message.author === "agent") {
@@ -26,6 +28,16 @@
   };
 
   $: avatar_url = getAvatarUrl();
+
+  onMount(() => {
+    timestamp = moment(message.timestamp.toDate()).fromNow();
+
+    timestamp_interval = setInterval(() => {
+      timestamp = moment(message.timestamp.toDate()).fromNow();
+    }, 3000);
+  });
+
+  onDestroy(() => clearInterval(timestamp_interval));
 </script>
 
 <div
@@ -48,7 +60,11 @@
           <span>{message.username} - </span>
         {/if}
       </span>
-      {moment(message.timestamp.toDate()).fromNow()}
+      {#if timestamp}
+        <span>
+          {timestamp}
+        </span>
+      {/if}
     </div>
     {#if Array.isArray(message.text)}
       {#each message.text as text}
@@ -59,6 +75,22 @@
     {:else}
       <div class="cw-message">
         {message.text}
+      </div>
+      <div class="cw-message">
+        Reference site about Lorem Ipsum, giving information on its origins, as
+        well as a random Lipsum generator.
+      </div>
+      <div class="cw-message">
+        Reference site about Lorem Ipsum, giving information on its origins, as
+        well as a random Lipsum generator.
+      </div>
+      <div class="cw-message">
+        Reference site about Lorem Ipsum, giving information on its origins, as
+        well as a random Lipsum generator.
+      </div>
+      <div class="cw-message">
+        Reference site about Lorem Ipsum, giving information on its origins, as
+        well as a random Lipsum generator.
       </div>
     {/if}
   </div>
@@ -80,8 +112,9 @@
   }
 
   .cw-avatar img {
-    width: 24px;
-    height: 24px;
+    min-width: 24px;
+    max-width: 24px;
+    height: auto;
     border-radius: 50%;
   }
 
@@ -115,8 +148,8 @@
 
   .cw-message {
     background-color: white;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 5px;
+    padding: 7.25px;
     font-size: 0.813rem;
     display: inline;
     margin-right: auto;
