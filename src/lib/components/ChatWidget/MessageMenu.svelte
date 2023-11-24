@@ -5,14 +5,14 @@
 
   import widgetStore from "$lib/stores/widget.store";
 
-  export let open = false;
+  $: open = $widgetStore.menu;
 
   // const onDownloadTranscript = () => {
   //   open = false;
   // };
 
   const onEndChat = () => {
-    open = false;
+    widgetStore.toggleMenu();
   };
 
   const onToggleSound = () => {
@@ -20,7 +20,9 @@
     widgetStore.toggleSound();
   };
 
-  const onClickOutside = () => (open = false);
+  const onClickOutside = () => {
+    widgetStore.toggleMenu(false);
+  };
 
   $: sound = $widgetStore.sound;
 </script>

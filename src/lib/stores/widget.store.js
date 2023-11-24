@@ -8,9 +8,17 @@ const WidgetStore = () => {
     session: {},
     messages: {},
     sound: localStorage.getItem("sound") === "true",
+    menu: false,
   });
 
   let messageSubscriber, sessionSubscriber;
+
+  const toggleMenu = (nextState) => {
+    store.update((state) => ({
+      ...state,
+      menu: typeof nextState === "boolean" ? nextState : !state.menu,
+    }));
+  };
 
   const toggleSound = () => {
     let sound = localStorage.getItem("sound") === "true";
@@ -100,6 +108,7 @@ const WidgetStore = () => {
     addSessionListener,
     removeSessionListener,
     toggleSound,
+    toggleMenu,
   };
 };
 

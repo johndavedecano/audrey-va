@@ -1,11 +1,13 @@
 <script>
   // @ts-nocheck
   import { auth } from "$lib/firebase";
+  import widgetStore from "$lib/stores/widget.store";
 
   export let widget = {};
 
   const onMinimize = () => {
     window.parent.postMessage("cw-minimize");
+    widgetStore.toggleMenu(false);
   };
 
   const logout = () => auth.signOut();

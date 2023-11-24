@@ -1,21 +1,38 @@
 <script>
   // @ts-nocheck
-
   import MessageMenu from "./MessageMenu.svelte";
   import MoreButton from "./MoreButton.svelte";
   import SendButton from "./SendButton.svelte";
+  import widgetStore from "$lib/stores/widget.store";
 
-  let menu = false;
+  let value = "";
 
-  const onSendMessage = () => {};
+  const onSendMessage = () => {
+    if (value) {
+      value = "";
+    }
+  };
+
+  const onKeyUp = (evt) => {
+    if (evt.keyCode === 13 && !evt.shiftKey) {
+      evt.preventDefault();
+      onSendMessage();
+      return false;
+    }
+  };
 </script>
 
-<MessageMenu bind:open={menu} />
+<MessageMenu />
 
 <div class="cw-controls">
-  <textarea placeholder="Ask your question..." class="cw-input" />
+  <textarea
+    placeholder="Ask your question..."
+    class="cw-input"
+    on:keyup={onKeyUp}
+    bind:value
+  />
   <SendButton on:click={onSendMessage} />
-  <MoreButton on:click={() => (menu = !menu)} />
+  <MoreButton on:click={widgetStore.toggleMenu} />
 </div>
 
 <style lang="postcss">
