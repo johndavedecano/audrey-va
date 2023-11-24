@@ -4,9 +4,28 @@ import { writable } from "svelte/store";
 import omit from "lodash/omit";
 
 const WidgetStore = () => {
-  const store = writable({ session: {}, messages: {} });
+  const store = writable({
+    session: {},
+    messages: {},
+    sound: localStorage.getItem("sound") === "true",
+  });
 
   let messageSubscriber, sessionSubscriber;
+
+  const toggleSound = () => {
+    let sound = localStorage.getItem("sound") === "true";
+    if (sound) {
+      sound = false;
+      localStorage.removeItem("sound");
+    } else {
+      sound = true;
+      localStorage.setItem("sound", true);
+    }
+    store.update((state) => ({
+      ...state,
+      sound,
+    }));
+  };
 
   const addMessageListener = (sessionId, callback = () => {}) => {
     messageSubscriber = createMessageListener(sessionId, (snapshot) => {
@@ -80,6 +99,7 @@ const WidgetStore = () => {
     removeMessageListener,
     addSessionListener,
     removeSessionListener,
+    toggleSound,
   };
 };
 
