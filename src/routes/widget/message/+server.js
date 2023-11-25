@@ -134,12 +134,17 @@ export async function POST({ request }) {
             languageCode: "en-US",
           },
         },
-        queryParams: {
-          knowledgeBaseNames: [
-            `projects/${widget.dialogflow_project_id}/knowledgeBases/NzY3MjEyMzMwODAyNzkzNjc2OA`,
-          ],
-        },
+        queryParams: {},
       };
+
+      if (!isEmpty(widget.dialogflow_knowledge_base)) {
+        const knowledgeBaseNames = widget.dialogflow_knowledge_base
+          .split(",")
+          .map((k) => {
+            return `projects/${widget.dialogflow_project_id}/knowledgeBases/${k}`;
+          });
+        request.queryParams.knowledgeBaseNames = knowledgeBaseNames;
+      }
 
       const responses = await sessionClient.detectIntent(request);
 

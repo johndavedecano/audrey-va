@@ -45,6 +45,7 @@
       dialogflow_project_id: data.dialogflow_project_id,
       dialogflow_private_key: data.dialogflow_private_key,
       dialogflow_client_email: data.dialogflow_client_email,
+      dialogflow_knowledge_base: data.dialogflow_knowledge_base,
     };
   });
 </script>
@@ -113,6 +114,29 @@
               type="email"
               class="input input-bordered w-full"
               bind:value={values.dialogflow_client_email}
+              required
+            />
+          {/if}
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label" for="dialogflow_knowledge_base">
+            Knowledge Base
+          </label>
+          {#if hidden}
+            <input
+              name="dialogflow_knowledge_base"
+              type="password"
+              class="input input-bordered w-full"
+              bind:value={values.dialogflow_knowledge_base}
+              required
+            />
+          {:else}
+            <input
+              name="dialogflow_knowledge_base"
+              type="email"
+              class="input input-bordered w-full"
+              bind:value={values.dialogflow_knowledge_base}
               required
             />
           {/if}

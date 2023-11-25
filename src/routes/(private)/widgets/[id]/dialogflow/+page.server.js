@@ -29,6 +29,7 @@ export async function load({ url, params, cookies }) {
     dialogflow_project_id: widget.dialogflow_project_id,
     dialogflow_private_key: widget.dialogflow_private_key,
     dialogflow_client_email: widget.dialogflow_client_email,
+    dialogflow_knowledge_base: widget.dialogflow_knowledge_base,
   };
 }
 

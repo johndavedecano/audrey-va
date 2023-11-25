@@ -12,6 +12,7 @@ export async function POST({ request, cookies, params }) {
       dialogflow_project_id: Joi.string().required(),
       dialogflow_private_key: Joi.string().required(),
       dialogflow_client_email: Joi.string().required(),
+      dialogflow_knowledge_base: Joi.string().optional().allow("", null),
     });
 
     const validate = schema.validate(body);
@@ -49,6 +50,7 @@ export async function POST({ request, cookies, params }) {
       dialogflow_project_id: body.dialogflow_project_id,
       dialogflow_private_key: body.dialogflow_private_key,
       dialogflow_client_email: body.dialogflow_client_email,
+      dialogflow_knowledge_base: body.dialogflow_knowledge_base,
       dialogflow_setup: true,
     });
 
