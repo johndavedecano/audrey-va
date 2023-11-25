@@ -138,6 +138,7 @@
     display: inline;
     margin-right: auto;
     margin-left: 0px;
+    max-width: 85%;
   }
 
   .cw-author {

@@ -26,6 +26,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@google-cloud/dialogflow": "^6.2.0",
     "@tabler/icons-svelte": "^2.40.0",
     "axios": "^1.6.2",
     "dialogflow": "^1.2.0",

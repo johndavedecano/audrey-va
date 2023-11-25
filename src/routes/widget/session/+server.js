@@ -1,14 +1,16 @@
 // @ts-nocheck
 
 import { auth, db } from "$lib/server/firebase.js";
+import { createSessionToken } from "$lib/server/session.js";
 import { error, json } from "@sveltejs/kit";
 import { v4 } from "uuid";
+import client from "@google-cloud/dialogflow";
 import firestore from "firebase-admin/firestore";
-import Joi from "joi";
-import dialogflow from "dialogflow";
 import isEmpty from "lodash/isEmpty.js";
-import { createSessionToken } from "$lib/server/session.js";
+import Joi from "joi";
 import moment from "moment";
+
+const dialogflow = client.v2beta1;
 
 export async function POST({ request }) {
   try {
@@ -128,7 +130,7 @@ export async function POST({ request }) {
       credentials,
     });
 
-    const sessionPath = sessionClient.sessionPath(
+    const sessionPath = sessionClient.projectAgentSessionPath(
       widget.dialogflow_project_id,
       session_id
     );

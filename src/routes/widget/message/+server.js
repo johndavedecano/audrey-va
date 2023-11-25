@@ -7,8 +7,10 @@ import { json } from "@sveltejs/kit";
 import Joi from "joi";
 import sanitizeHtml from "sanitize-html";
 import moment from "moment";
-import dialogflow from "dialogflow";
+import client from "@google-cloud/dialogflow";
 import isEmpty from "lodash/isEmpty.js";
+
+const dialogflow = client.v2beta1;
 
 export async function POST({ request }) {
   try {
@@ -119,12 +121,12 @@ export async function POST({ request }) {
         credentials,
       });
 
-      const sessionPath = sessionClient.sessionPath(
+      const sessionPath = sessionClient.projectAgentSessionPath(
         widget.dialogflow_project_id,
         decoded.session_id
       );
 
-      const responses = await sessionClient.detectIntent({
+      const request = {
         session: sessionPath,
         queryInput: {
           text: {
@@ -132,7 +134,16 @@ export async function POST({ request }) {
             languageCode: "en-US",
           },
         },
-      });
+        queryParams: {
+          knowledgeBaseNames: [
+            `projects/${widget.dialogflow_project_id}/knowledgeBases/NzY3MjEyMzMwODAyNzkzNjc2OA`,
+          ],
+        },
+      };
+
+      const responses = await sessionClient.detectIntent(request);
+
+      console.log(responses);
 
       const result = responses[0].queryResult.fulfillmentText;
 
