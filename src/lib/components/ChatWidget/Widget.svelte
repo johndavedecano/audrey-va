@@ -18,13 +18,9 @@
 
   $: session = $widgetStore.session;
 
-  const onMessageUpdate = () => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent("scroll_bottom"));
-    }, 1000);
-  };
+  const onMessageUpdate = () => {};
 
-  const onSessionUpdate = (type) => {};
+  const onSessionUpdate = () => {};
 
   const setListeners = () => {
     const sessionId = localStorage.getItem("session_id");
@@ -39,9 +35,7 @@
 
   const onLogout = () => {
     widgetStore.setLoggedIn(false);
-
     localStorage.removeItem("session_id");
-
     removeListeners();
   };
 
@@ -61,9 +55,7 @@
     });
   });
 
-  onDestroy(() => {
-    removeListeners();
-  });
+  onDestroy(() => removeListeners());
 </script>
 
 <Portal target="body">

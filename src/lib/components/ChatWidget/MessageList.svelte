@@ -27,13 +27,16 @@
     };
   };
 
+  let timeout;
+
   const scrollToBottom = () => {
     if (wrapper) {
-      wrapper.scrollTop = wrapper.scrollHeight;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => (wrapper.scrollTop = wrapper.scrollHeight));
     }
   };
 
-  $: if (messages && distance <= 120) scrollToBottom();
+  $: if (messages.length && distance <= 120) scrollToBottom();
 </script>
 
 <div class="cw-message-list" bind:this={wrapper} use:scroll>
@@ -57,10 +60,25 @@
     min-height: calc(100% - 145px);
     max-height: calc(100% - 145px);
   }
+
   .cw-message-list-inner {
     padding: 15px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  /* For WebKit browsers */
+  .cw-message-list::-webkit-scrollbar {
+    width: 12px; /* Width of the entire scrollbar */
+  }
+
+  .cw-message-list::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color); /* Color of the thumb */
+    border-radius: 6px; /* Rounded corners of the thumb */
+  }
+
+  .cw-message-list::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the track */
   }
 </style>

@@ -1,18 +1,17 @@
 <script>
   // @ts-nocheck
+  import { v4 } from "uuid";
+
   import MessageMenu from "./MessageMenu.svelte";
   import MoreButton from "./MoreButton.svelte";
   import SendButton from "./SendButton.svelte";
   import widgetStore from "$lib/stores/widget.store";
   import axios from "axios";
-  import { v4 } from "uuid";
   import moment from "moment";
 
   let value = "";
 
-  // export let widget = {};
-
-  export let session = {};
+  $: session = $widgetStore.session;
 
   const onSendMessage = async () => {
     try {
@@ -27,8 +26,6 @@
         };
 
         widgetStore.addMessage(message);
-
-        window.dispatchEvent(new CustomEvent("scroll_bottom"));
 
         value = "";
 
