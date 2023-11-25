@@ -13,8 +13,6 @@
 
   $: session = $widgetStore.session;
 
-  $: widget = $widgetStore.widget;
-
   const onSendMessage = async () => {
     try {
       if (value !== "") {
