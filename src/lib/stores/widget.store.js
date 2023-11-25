@@ -1,12 +1,18 @@
 // @ts-nocheck
-import { createMessageListener, createSessionListener } from "$lib/chat";
+import {
+  createMessageListener,
+  createSessionListener,
+  groupMessages,
+} from "$lib/chat";
+
 import { writable } from "svelte/store";
-import omit from "lodash/omit";
 
 const WidgetStore = () => {
   const store = writable({
     session: {},
-    messages: {},
+    messages: [],
+    added: [],
+    messageKeys: new Set(),
     sound: localStorage.getItem("sound") === "true",
     menu: false,
   });
@@ -41,34 +47,15 @@ const WidgetStore = () => {
         if (change.type === "added") {
           const message = { id: change.doc.id, ...change.doc.data() };
           store.update((state) => {
-            return {
-              ...state,
-              messages: { ...state.messages, [message.id]: message },
-            };
+            if (!state.added.includes(message.id)) {
+              return {
+                ...state,
+                messages: groupMessages([...state.messages, message]),
+              };
+            }
+            return state;
           });
         }
-
-        if (change.type === "modified") {
-          store.update((state) => {
-            return {
-              ...state,
-              messages: {
-                ...state.messages,
-                [change.doc.id]: change.doc.data(),
-              },
-            };
-          });
-        }
-
-        if (change.type === "removed") {
-          store.update((state) => {
-            return {
-              ...state,
-              messages: omit(state.messages, change.doc.id),
-            };
-          });
-        }
-
         callback(change.type);
       });
     });
@@ -81,11 +68,11 @@ const WidgetStore = () => {
   const addSessionListener = (sessionId) => {
     sessionSubscriber = createSessionListener(sessionId, (doc) => {
       if (doc.exists()) {
-        console.log("Document data:", doc.data());
         store.update((state) => {
           return {
             ...state,
             session: {
+              session_id: sessionId,
               ...state.session,
               ...doc.data(),
             },
@@ -101,6 +88,16 @@ const WidgetStore = () => {
     if (typeof sessionSubscriber === "function") sessionSubscriber();
   };
 
+  const addMessage = (message) => {
+    store.update((state) => {
+      return {
+        ...state,
+        added: [...state.added, message.id],
+        messages: groupMessages([...state.messages, message]),
+      };
+    });
+  };
+
   return {
     ...store,
     addMessageListener,
@@ -109,6 +106,7 @@ const WidgetStore = () => {
     removeSessionListener,
     toggleSound,
     toggleMenu,
+    addMessage,
   };
 };
 

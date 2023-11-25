@@ -7,6 +7,8 @@ import firestore from "firebase-admin/firestore";
 import Joi from "joi";
 import dialogflow from "dialogflow";
 import isEmpty from "lodash/isEmpty.js";
+import { createSessionToken } from "$lib/server/session.js";
+import moment from "moment";
 
 export async function POST({ request }) {
   try {
@@ -59,7 +61,7 @@ export async function POST({ request }) {
       author: "user",
       username: body.name,
       text: body.message,
-      timestamp: firestore.FieldValue.serverTimestamp(),
+      timestamp: moment().valueOf(),
       session_id,
     };
 
@@ -79,8 +81,15 @@ export async function POST({ request }) {
       });
 
     const token = await auth.createCustomToken(customer, {
-      organization_id: widget.organization,
+      organization_id: body.organization_id,
       widget_id: widget.id,
+    });
+
+    const session_token = createSessionToken({
+      organization_id: body.organization_id,
+      widget_id: widget.id,
+      session_id,
+      customer_id: customer,
     });
 
     await db.collection("sessions").doc(session_id).set({
@@ -88,6 +97,7 @@ export async function POST({ request }) {
       widget_id: body.widget_id,
       organization_id: body.organization_id,
       customer_id: customer,
+      session_token,
       updated_at: firestore.FieldValue.serverTimestamp(),
       created_at: firestore.FieldValue.serverTimestamp(),
       last_message_at: firestore.FieldValue.serverTimestamp(),
@@ -141,7 +151,7 @@ export async function POST({ request }) {
       author: "bot",
       username: widget.bot_name,
       text: result,
-      timestamp: firestore.FieldValue.serverTimestamp(),
+      timestamp: moment().valueOf(),
       session_id,
     };
 

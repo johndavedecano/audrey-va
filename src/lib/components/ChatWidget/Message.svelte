@@ -30,10 +30,10 @@
   $: avatar_url = getAvatarUrl();
 
   onMount(() => {
-    timestamp = moment(message.timestamp.toDate()).fromNow();
+    timestamp = moment(new Date(message.timestamp)).fromNow();
 
     timestamp_interval = setInterval(() => {
-      timestamp = moment(message.timestamp.toDate()).fromNow();
+      timestamp = moment(new Date(message.timestamp)).fromNow();
     }, 3000);
   });
 

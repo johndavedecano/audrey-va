@@ -4,12 +4,44 @@
   import MoreButton from "./MoreButton.svelte";
   import SendButton from "./SendButton.svelte";
   import widgetStore from "$lib/stores/widget.store";
+  import axios from "axios";
+  import { v4 } from "uuid";
+  import moment from "moment";
 
   let value = "";
 
-  const onSendMessage = () => {
-    if (value) {
-      value = "";
+  // export let widget = {};
+
+  export let session = {};
+
+  const onSendMessage = async () => {
+    try {
+      if (value !== "") {
+        const message = {
+          id: v4(),
+          author: "user",
+          username: "",
+          text: value,
+          timestamp: moment().valueOf(),
+          session_id: session.session_id,
+        };
+
+        widgetStore.addMessage(message);
+
+        window.dispatchEvent(new CustomEvent("message_added"));
+
+        value = "";
+
+        const params = {
+          message_id: message.id,
+          message: message.text,
+          session_token: session.session_token,
+        };
+
+        await axios.post("/widget/message", params);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

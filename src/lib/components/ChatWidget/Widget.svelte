@@ -10,8 +10,6 @@
   import Portal from "svelte-portal";
   import WelcomeForm from "./WelcomeForm.svelte";
   import widgetStore from "$lib/stores/widget.store";
-  import sortBy from "lodash/sortBy";
-
   import { errorMessage } from "$lib/string";
   import { auth } from "$lib/firebase";
   import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
@@ -59,7 +57,7 @@
 
   $: variables = `--primary-color: ${widget.color};`;
 
-  const onMessageUpdate = (type) => console.log(type);
+  const onMessageUpdate = () => {};
 
   const onSessionUpdate = (type) => console.log(type);
 
@@ -89,18 +87,9 @@
     setListeners();
   };
 
-  const getMessages = (items) => {
-    return sortBy(
-      Object.keys(items).map((key) => {
-        return items[key];
-      }),
-      (obj) => obj.timestamp.seconds
-    );
-  };
-
   $: session = $widgetStore.session;
 
-  $: messages = getMessages($widgetStore.messages);
+  $: messages = $widgetStore.messages;
 
   onMount(() => {
     onAuthStateChanged(auth, (user) => {
@@ -131,7 +120,7 @@
       {/if}
     </MessageList>
     {#if isLoggedIn}
-      <MessageControls {widget} />
+      <MessageControls {widget} {session} />
     {/if}
   </div>
 </Portal>
