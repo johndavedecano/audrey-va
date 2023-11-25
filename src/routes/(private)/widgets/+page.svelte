@@ -7,8 +7,6 @@
   import PageMain from "$lib/components/PageMain.svelte";
 
   import {
-    IconBrandGoogle,
-    IconCode,
     IconEdit,
     IconEye,
     IconPaint,

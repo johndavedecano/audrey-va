@@ -13,6 +13,8 @@
 
   $: session = $widgetStore.session;
 
+  $: widget = $widgetStore.widget;
+
   const onSendMessage = async () => {
     try {
       if (value !== "") {
@@ -39,6 +41,7 @@
       }
     } catch (error) {
       console.error(error);
+      widgetStore.hideTyping("bot");
     }
   };
 

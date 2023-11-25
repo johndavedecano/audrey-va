@@ -36,7 +36,7 @@
     }
   };
 
-  $: if (messages.length && distance <= 120) scrollToBottom();
+  $: if (messages.length && distance <= 60) scrollToBottom();
 </script>
 
 <div class="cw-message-list" bind:this={wrapper} use:scroll>

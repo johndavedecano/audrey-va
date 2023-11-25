@@ -6,6 +6,9 @@ import {
 } from "$lib/chat";
 
 import { writable } from "svelte/store";
+import { v4 } from "uuid";
+
+import moment from "moment";
 
 const WidgetStore = () => {
   const store = writable({
@@ -20,6 +23,47 @@ const WidgetStore = () => {
   });
 
   let messageSubscriber, sessionSubscriber;
+
+  const addTyping = (author, username, message) => {
+    store.update((state) => {
+      return {
+        ...state,
+        messages: state.messages.concat([
+          {
+            id: v4(),
+            author,
+            username,
+            text: [message],
+            type: "typing",
+            timestamp: moment().valueOf(),
+            session_id: state.session.id,
+          },
+        ]),
+      };
+    });
+  };
+
+  const filterTyping = (author, messages) => {
+    const nextMessages = [];
+
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i];
+      if (message.type === "typing" && message.author === author) {
+      } else {
+        nextMessages.push(message);
+      }
+    }
+    return nextMessages;
+  };
+
+  const hideTyping = (author) => {
+    store.update((state) => {
+      return {
+        ...state,
+        messages: filterTyping(author, state.messages),
+      };
+    });
+  };
 
   const setLoggedIn = (isLoggedIn = false) => {
     if (isLoggedIn) {
@@ -138,6 +182,8 @@ const WidgetStore = () => {
     setWidget,
     setLoading,
     setLoggedIn,
+    addTyping,
+    hideTyping,
   };
 };
 

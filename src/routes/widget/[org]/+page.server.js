@@ -19,12 +19,19 @@ export async function load({ url, params }) {
     });
   }
 
+  const widget = {
+    id: widgetId,
+    organization: params.org,
+    ...ref.data(),
+  };
+
+  delete widget.dialogflow_client_email;
+  delete widget.dialogflow_knowledge_base;
+  delete widget.dialogflow_private_key;
+  delete widget.dialogflow_project_id;
+
   return {
-    widget: {
-      id: widgetId,
-      organization: params.org,
-      ...ref.data(),
-    },
+    widget,
   };
 }
 
