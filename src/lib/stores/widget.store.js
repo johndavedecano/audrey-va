@@ -12,12 +12,40 @@ const WidgetStore = () => {
     session: {},
     messages: [],
     added: [],
-    messageKeys: new Set(),
     sound: localStorage.getItem("sound") === "true",
     menu: false,
+    widget: {},
+    loading: false,
+    isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
   });
 
   let messageSubscriber, sessionSubscriber;
+
+  const setLoggedIn = (isLoggedIn = false) => {
+    if (isLoggedIn) {
+      localStorage.setItem("isLoggedIn", true);
+    } else {
+      localStorage.removeItem("isLoggedIn");
+    }
+    store.update((state) => ({
+      ...state,
+      isLoggedIn,
+    }));
+  };
+
+  const setLoading = (loading = false) => {
+    store.update((state) => ({
+      ...state,
+      loading,
+    }));
+  };
+
+  const setWidget = (widget) => {
+    store.update((state) => ({
+      ...state,
+      widget,
+    }));
+  };
 
   const toggleMenu = (nextState) => {
     store.update((state) => ({
@@ -107,6 +135,9 @@ const WidgetStore = () => {
     toggleSound,
     toggleMenu,
     addMessage,
+    setWidget,
+    setLoading,
+    setLoggedIn,
   };
 };
 

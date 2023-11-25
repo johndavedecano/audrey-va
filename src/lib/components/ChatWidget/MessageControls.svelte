@@ -28,7 +28,7 @@
 
         widgetStore.addMessage(message);
 
-        window.dispatchEvent(new CustomEvent("message_added"));
+        window.dispatchEvent(new CustomEvent("scroll_bottom"));
 
         value = "";
 

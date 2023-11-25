@@ -1,65 +1,30 @@
 <script>
   // @ts-nocheck
   import { onDestroy, onMount } from "svelte";
+  import { auth } from "$lib/firebase";
+  import { onAuthStateChanged } from "firebase/auth";
 
-  import axios from "axios";
   import Header from "./Header.svelte";
-  import Message from "./Message.svelte";
   import MessageControls from "./MessageControls.svelte";
   import MessageList from "./MessageList.svelte";
   import Portal from "svelte-portal";
-  import WelcomeForm from "./WelcomeForm.svelte";
   import widgetStore from "$lib/stores/widget.store";
-  import { errorMessage } from "$lib/string";
-  import { auth } from "$lib/firebase";
-  import { onAuthStateChanged, signInWithCustomToken } from "firebase/auth";
 
-  export let widget = {};
-
-  let loading = false;
-
-  let isLoggedIn = false;
-
-  const startSession = async (evt) => {
-    try {
-      loading = true;
-
-      const customer = evt.detail;
-
-      const params = {
-        email: customer.email,
-        phone: customer.phone,
-        name: customer.name,
-        message: customer.message,
-        organization_id: widget.organization,
-        widget_id: widget.id,
-      };
-
-      const response = await axios.post("/widget/session", params);
-
-      const data = response.data.data;
-
-      await signInWithCustomToken(auth, data.token);
-
-      localStorage.setItem("session_id", data.session_id);
-
-      isLoggedIn = true;
-
-      loading = false;
-    } catch (error) {
-      loading = false;
-
-      console.error(error);
-
-      alert(errorMessage(error));
-    }
-  };
+  $: isLoggedIn = $widgetStore.isLoggedIn;
 
   $: variables = `--primary-color: ${widget.color};`;
 
-  const onMessageUpdate = () => {};
+  $: widget = $widgetStore.widget;
 
-  const onSessionUpdate = (type) => console.log(type);
+  $: session = $widgetStore.session;
+
+  const onMessageUpdate = () => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("scroll_bottom"));
+    }, 1000);
+  };
+
+  const onSessionUpdate = (type) => {};
 
   const setListeners = () => {
     const sessionId = localStorage.getItem("session_id");
@@ -73,23 +38,17 @@
   };
 
   const onLogout = () => {
-    isLoggedIn = false;
+    widgetStore.setLoggedIn(false);
 
     localStorage.removeItem("session_id");
 
     removeListeners();
-
-    console.log("logged out");
   };
 
   const onLoggedIn = () => {
-    isLoggedIn = true;
+    widgetStore.setLoggedIn(true);
     setListeners();
   };
-
-  $: session = $widgetStore.session;
-
-  $: messages = $widgetStore.messages;
 
   onMount(() => {
     onAuthStateChanged(auth, (user) => {
@@ -110,17 +69,9 @@
 <Portal target="body">
   <div class="cw" style={variables}>
     <Header {widget} />
-    <MessageList>
-      {#if !isLoggedIn}
-        <WelcomeForm {widget} on:submit={startSession} {loading} />
-      {:else}
-        {#each messages as message}
-          <Message {message} {widget} />
-        {/each}
-      {/if}
-    </MessageList>
+    <MessageList></MessageList>
     {#if isLoggedIn}
-      <MessageControls {widget} {session} />
+      <MessageControls />
     {/if}
   </div>
 </Portal>

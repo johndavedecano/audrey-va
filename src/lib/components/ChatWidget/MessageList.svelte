@@ -1,13 +1,19 @@
 <script>
   // @ts-nocheck
+  import WelcomeForm from "./WelcomeForm.svelte";
+  import Message from "./Message.svelte";
+  import widgetStore from "$lib/stores/widget.store";
 
-  import { onDestroy, onMount } from "svelte";
-
-  // export let widget = {};
   let distance = false;
   let wrapper;
 
-  const checkScroll = (node) => {
+  $: isLoggedIn = $widgetStore.isLoggedIn;
+
+  $: widget = $widgetStore.widget;
+
+  $: messages = $widgetStore.messages;
+
+  const scroll = (node) => {
     const func = () => {
       distance = node.scrollHeight - node.scrollTop - node.clientHeight;
     };
@@ -22,33 +28,23 @@
   };
 
   const scrollToBottom = () => {
-    wrapper.scrollTop = wrapper.scrollHeight;
+    if (wrapper) {
+      wrapper.scrollTop = wrapper.scrollHeight;
+    }
   };
 
-  const onMessageAdded = () => {
-    // console.log(scroll, "added");
-    setTimeout(() => {
-      if (distance <= 80) {
-        scrollToBottom();
-      }
-    });
-  };
-
-  onMount(() => {
-    setTimeout(() => {
-      scrollToBottom();
-    }, 1000);
-    window.addEventListener("message_added", onMessageAdded);
-  });
-
-  onDestroy(() => {
-    window.removeEventListener("message_added", onMessageAdded);
-  });
+  $: if (messages && distance <= 120) scrollToBottom();
 </script>
 
-<div class="cw-message-list" bind:this={wrapper} use:checkScroll>
+<div class="cw-message-list" bind:this={wrapper} use:scroll>
   <div class="cw-message-list-inner">
-    <slot />
+    {#if isLoggedIn}
+      {#each messages as message}
+        <Message {message} {widget} />
+      {/each}
+    {:else}
+      <WelcomeForm />
+    {/if}
   </div>
 </div>
 

@@ -1,10 +1,13 @@
 <script>
   // @ts-nocheck
-  import { createEventDispatcher } from "svelte";
+  import { signInWithCustomToken } from "firebase/auth";
+  import { errorMessage } from "$lib/string";
 
-  export let widget = {};
+  import widgetStore from "$lib/stores/widget.store";
 
-  export let loading = false;
+  $: loading = $widgetStore.loading;
+
+  $: widget = $widgetStore.widget;
 
   let values = {
     email: "johndavedecano@gmail.com",
@@ -13,16 +16,43 @@
     message: "welcome_message",
   };
 
-  const dispatch = createEventDispatcher("submit", values);
+  const startSession = async () => {
+    try {
+      widgetStore.setLoading(true);
 
-  const onSubmit = () => {
-    dispatch("submit", values);
+      const params = {
+        email: values.email,
+        phone: values.phone,
+        name: values.name,
+        message: values.message,
+        organization_id: widget.organization,
+        widget_id: widget.id,
+      };
+
+      const response = await axios.post("/widget/session", params);
+
+      const data = response.data.data;
+
+      await signInWithCustomToken(auth, data.token);
+
+      localStorage.setItem("session_id", data.session_id);
+
+      widgetStore.setLoggedIn(true);
+
+      widgetStore.setLoading(false);
+    } catch (error) {
+      widgetStore.setLoading(false);
+
+      console.error(error);
+
+      alert(errorMessage(error));
+    }
   };
 </script>
 
 <div class="cw-message-form-wrapper">
   <div class="cw-message-form">
-    <form action="" on:submit|preventDefault={onSubmit}>
+    <form action="" on:submit|preventDefault={startSession}>
       <p class="cw-welcome-message">
         {widget.welcome_message}
       </p>
