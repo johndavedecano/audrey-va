@@ -6,7 +6,7 @@
   $: widget = $widgetStore.widget;
 
   const onMinimize = () => {
-    window.parent.postMessage("cw-minimize");
+    window.parent.postMessage("cw-minimize", "*");
     widgetStore.toggleMenu(false);
   };
 </script>

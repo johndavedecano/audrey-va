@@ -35,10 +35,15 @@ function AudreyWidget() {
           opacity: 1;
           box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
           z-index:10000;
+          border: none;
       }
 
       .cw-bubble-hidden {
           opacity: 0;
+      }
+
+      .cw-bubble > svg {
+        width: 60%;
       }
 
       .cw-frame {
@@ -99,6 +104,7 @@ function AudreyWidget() {
   };
 
   const onPostMessage = (event) => {
+    console.log(event.data);
     if (event.data === "cw-minimize") onMinimized();
   };
 

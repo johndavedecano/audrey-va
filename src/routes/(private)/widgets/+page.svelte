@@ -10,9 +10,9 @@
   import TableDropdown from "$lib/components/TableDropdown.svelte";
   import { widgets } from "$lib/stores/widgets.store";
   import DialogflowModal from "$lib/components/DialogflowModal.svelte";
+  import EmbedModal from "$lib/components/EmbedModal.svelte";
 
-  let widget = {};
-  let embed = false;
+  let embedModal;
   let dialogflowModal;
 
   $: items = $widgets;
@@ -40,7 +40,8 @@
         goto(`/widget?o=${item.org}&w=${item.id}`);
         break;
       case "code":
-        widget = item;
+        console.log(item);
+        embedModal.open(item);
         break;
       case "delete":
         onDelete(item);
@@ -59,7 +60,8 @@
   onMount(() => loadItems());
 </script>
 
-<DialogflowModal {widget} bind:this={dialogflowModal} />
+<DialogflowModal bind:this={dialogflowModal} />
+<EmbedModal bind:this={embedModal} />
 
 <PageMain>
   <PageHead
