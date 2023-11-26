@@ -22,6 +22,8 @@
 
   $: active = sessionId && isLoggedIn;
 
+  let audio;
+
   const onLogout = () => {
     widgetStore.setLoggedIn(false);
     widgetStore.setSessionId(null);
@@ -32,7 +34,15 @@
     widgetStore.addCustomerListener(widget.organization, user.uid);
   };
 
-  const onMessageUpdate = () => {};
+  const playNotificationSound = () => {
+    if (document.hidden && $widgetStore.sound) audio.play();
+  };
+
+  const onMessageUpdate = (type, message) => {
+    if (type === "added" && message.author !== "user") {
+      playNotificationSound();
+    }
+  };
 
   const onSessionUpdate = () => {};
 
@@ -62,6 +72,7 @@
       <MessageControls />
     {/if}
   </div>
+  <audio bind:this={audio}><source src="/sound.mp3" type="audio/mpeg" /></audio>
 </Portal>
 
 <style lang="postcss">

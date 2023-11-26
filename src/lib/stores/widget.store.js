@@ -174,8 +174,10 @@ const WidgetStore = () => {
     if (typeof messageSubscriber === "function") messageSubscriber();
     messageSubscriber = createMessageListener(sessionId, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
+        let message = {};
+
         if (change.type === "added") {
-          const message = { id: change.doc.id, ...change.doc.data() };
+          message = { id: change.doc.id, ...change.doc.data() };
           store.update((state) => {
             if (state.isLoggedIn && state.sessionId) {
               if (!state.added.includes(message.id)) {
@@ -188,7 +190,7 @@ const WidgetStore = () => {
             return state;
           });
         }
-        callback(change.type);
+        callback(change.type, message);
       });
     });
   };
