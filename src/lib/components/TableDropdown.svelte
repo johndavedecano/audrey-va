@@ -51,52 +51,52 @@
 >
   <IconDotsVertical size={20} />
 </button>
-{#if open}
-  <Portal target="body">
-    <div use:clickoutside on:clickoutside={() => (open = false)}>
-      <div
-        class="bg-white flex flex-col justify-start shadow-md table-dropdown absolute"
-        {style}
+
+<Portal target="body">
+  <div use:clickoutside on:clickoutside={() => (open = false)}>
+    <div
+      class="bg-white flex flex-col justify-start shadow-md table-dropdown absolute"
+      class:table-dropdown-open={open}
+      {style}
+    >
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("view")}
+        href="/"
       >
-        <a
-          class="dropdown-item"
-          on:click|preventDefault={() => onActionClick("view")}
-          href="/"
-        >
-          <IconEyeCode size={16} /> View Widget
-        </a>
-        <a
-          class="dropdown-item"
-          on:click|preventDefault={() => onActionClick("dialogflow")}
-          href="/"
-        >
-          <IconApi size={16} /> Dialogflow
-        </a>
-        <a
-          class="dropdown-item"
-          on:click|preventDefault={() => onActionClick("settings")}
-          href="/"
-        >
-          <IconSettings size={16} /> Settings
-        </a>
-        <a
-          class="dropdown-item"
-          on:click|preventDefault={() => onActionClick("code")}
-          href="/"
-        >
-          <IconCode size={16} /> Embed Code
-        </a>
-        <a
-          class="dropdown-item"
-          on:click|preventDefault={() => onActionClick("delete")}
-          href="/"
-        >
-          <IconTrash size={16} /> Delete Widget
-        </a>
-      </div>
+        <IconEyeCode size={16} /> View Widget
+      </a>
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("dialogflow")}
+        href="/"
+      >
+        <IconApi size={16} /> Dialogflow
+      </a>
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("settings")}
+        href="/"
+      >
+        <IconSettings size={16} /> Settings
+      </a>
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("code")}
+        href="/"
+      >
+        <IconCode size={16} /> Embed Code
+      </a>
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("delete")}
+        href="/"
+      >
+        <IconTrash size={16} /> Delete Widget
+      </a>
     </div>
-  </Portal>
-{/if}
+  </div>
+</Portal>
 
 <style>
   .table-dropdown {
@@ -105,6 +105,12 @@
     min-height: 100px;
     top: 0;
     right: 0;
+    transition: all 250ms ease-in-out;
+    display: none;
+  }
+
+  .table-dropdown-open {
+    display: flex;
   }
 
   .dropdown-item {

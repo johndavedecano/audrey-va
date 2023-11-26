@@ -9,9 +9,11 @@
   import PageMain from "$lib/components/PageMain.svelte";
   import TableDropdown from "$lib/components/TableDropdown.svelte";
   import { widgets } from "$lib/stores/widgets.store";
+  import DialogflowModal from "$lib/components/DialogflowModal.svelte";
 
   let widget = {};
   let embed = false;
+  let dialogflowModal;
 
   $: items = $widgets;
 
@@ -32,7 +34,7 @@
         goto("/widgets/" + item.id + "/edit");
         break;
       case "dialogflow":
-        goto("/widgets/" + item.id + "/dialogflow");
+        dialogflowModal.open(item);
         break;
       case "view":
         goto(`/widget?o=${item.org}&w=${item.id}`);
@@ -56,6 +58,8 @@
 
   onMount(() => loadItems());
 </script>
+
+<DialogflowModal {widget} bind:this={dialogflowModal} />
 
 <PageMain>
   <PageHead

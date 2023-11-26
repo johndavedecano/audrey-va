@@ -21,9 +21,6 @@ export async function GET({ cookies }) {
           id: v.id,
           org: organization,
           ...v.data(),
-          dialogflow_project_id: undefined,
-          dialogflow_private_key: undefined,
-          dialogflow_client_email: undefined,
         };
       })
       .filter((v) => v.deleted !== true);
