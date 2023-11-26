@@ -1,7 +1,7 @@
 <script>
+  // @ts-nocheck
   import { createEventDispatcher } from "svelte";
 
-  // @ts-nocheck
   const dispatch = createEventDispatcher();
 </script>
 

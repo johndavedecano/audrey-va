@@ -2,21 +2,16 @@
   // @ts-nocheck
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-
-  import PageHead from "$lib/components/PageHead.svelte";
-  import PageMain from "$lib/components/PageMain.svelte";
-
-  import {
-    IconEdit,
-    IconEye,
-    IconPaint,
-    IconPlug,
-    IconTrash,
-  } from "@tabler/icons-svelte";
+  import { IconPaint } from "@tabler/icons-svelte";
 
   import axios from "axios";
+  import PageHead from "$lib/components/PageHead.svelte";
+  import PageMain from "$lib/components/PageMain.svelte";
+  import TableDropdown from "$lib/components/TableDropdown.svelte";
 
   let items = [];
+  let widget = {};
+  let embed = false;
 
   const onAddNew = () => goto("/widgets/create");
 
@@ -31,8 +26,24 @@
       });
   };
 
-  const onEdit = (item) => {
-    goto("/widgets/" + item.id + "/edit");
+  const onActionClicked = (action, item) => {
+    switch (action) {
+      case "settings":
+        goto("/widgets/" + item.id + "/edit");
+        break;
+      case "dialogflow":
+        goto("/widgets/" + item.id + "/dialogflow");
+        break;
+      case "view":
+        goto(`/widget?o=${item.org}&w=${item.id}`);
+        break;
+      case "code":
+        widget = item;
+        break;
+      case "delete":
+        onDelete(item);
+        break;
+    }
   };
 
   const onDelete = async (item) => {
@@ -41,14 +52,6 @@
       await axios.delete("/widgets/" + item.id + "/edit");
       loadItems();
     }
-  };
-
-  const onView = (item) => {
-    goto(`/widget?o=${item.org}&w=${item.id}`);
-  };
-
-  const onIntegrate = (item) => {
-    goto("/widgets/" + item.id + "/dialogflow");
   };
 
   onMount(() => loadItems());
@@ -94,32 +97,9 @@
                 </div>
               </td>
               <td class="text-right">
-                <div>
-                  <button
-                    class="btn btn-success text-white btn-square"
-                    on:click={() => onView(item)}
-                  >
-                    <IconEye size={16} />
-                  </button>
-                  <button
-                    class="btn btn-warning btn-square text-white"
-                    on:click={() => onIntegrate(item)}
-                  >
-                    <IconPlug size={16} />
-                  </button>
-                  <button
-                    class="btn btn-primary btn-square"
-                    on:click={() => onEdit(item)}
-                  >
-                    <IconEdit size={16} />
-                  </button>
-                  <button
-                    class="btn btn-error text-white btn-square"
-                    on:click={() => onDelete(item)}
-                  >
-                    <IconTrash size={16} />
-                  </button>
-                </div>
+                <TableDropdown
+                  on:action={(evt) => onActionClicked(evt.detail, item)}
+                />
               </td>
             </tr>
           {/each}
