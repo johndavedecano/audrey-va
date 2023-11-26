@@ -1,6 +1,5 @@
 <script>
   // @ts-nocheck
-  import { auth } from "$lib/firebase";
 
   import widgetStore from "$lib/stores/widget.store";
 
