@@ -29,7 +29,7 @@
 
   const onLoggedIn = (user) => {
     widgetStore.setLoggedIn(true);
-    widgetStore.addCustomerListener(user.uid, widget.organization);
+    widgetStore.addCustomerListener(widget.organization, user.uid);
   };
 
   const onMessageUpdate = () => {};
@@ -56,7 +56,7 @@
 
 <Portal target="body">
   <div class="cw" style={variables}>
-    <Header {widget} />
+    <Header />
     <MessageList></MessageList>
     {#if active}
       <MessageControls />

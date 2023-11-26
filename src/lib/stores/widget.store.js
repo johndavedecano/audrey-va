@@ -28,6 +28,7 @@ const WidgetStore = () => {
   let messageSubscriber, sessionSubscriber, customerSubscriber;
 
   const endSession = () => {
+    localStorage.removeItem("sessionId");
     store.update((state) => ({
       ...state,
       messages: [],
