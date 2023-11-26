@@ -6,10 +6,12 @@
 
   import {
     IconCode,
+    IconHelp,
     IconHome,
     IconLock,
     IconLogout,
     IconMessage,
+    IconTicket,
     IconUser,
     IconUsersGroup,
     IconWallpaper,
@@ -48,7 +50,14 @@
   <li>
     <a on:click={onClick} href="/chats" class:active={isActive("/chats")}>
       <IconMessage size={16} />
-      Chats</a
+      <div class="flex-1">Live Chats</div>
+      <div class="badge badge-error badge-sm text-white">5</div>
+    </a>
+  </li>
+  <li>
+    <a on:click={onClick} href="/tickets" class:active={isActive("/tickets")}>
+      <IconHelp size={16} />
+      Tickets</a
     >
   </li>
   <li>

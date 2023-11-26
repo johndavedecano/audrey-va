@@ -23,6 +23,7 @@ const WidgetStore = () => {
     loading: false,
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
     customer: {},
+    typing: "",
   });
 
   let messageSubscriber, sessionSubscriber, customerSubscriber;
@@ -50,43 +51,20 @@ const WidgetStore = () => {
     }));
   };
 
-  const addTyping = (author, username, message) => {
+  const addTyping = (message) => {
     store.update((state) => {
       return {
         ...state,
-        messages: state.messages.concat([
-          {
-            id: v4(),
-            author,
-            username,
-            text: [message],
-            type: "typing",
-            timestamp: moment().valueOf(),
-            session_id: state.session.id,
-          },
-        ]),
+        typing: message,
       };
     });
-  };
-
-  const filterTyping = (author, messages) => {
-    const nextMessages = [];
-
-    for (let i = 0; i < messages.length; i++) {
-      const message = messages[i];
-      if (message.type === "typing" && message.author === author) {
-      } else {
-        nextMessages.push(message);
-      }
-    }
-    return nextMessages;
   };
 
   const hideTyping = (author) => {
     store.update((state) => {
       return {
         ...state,
-        messages: filterTyping(author, state.messages),
+        typing: null,
       };
     });
   };

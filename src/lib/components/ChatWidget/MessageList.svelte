@@ -62,9 +62,31 @@
       <WelcomeForm />
     {/if}
   </div>
+  <div class="cw-typing" class:cw-typing-show={$widgetStore.typing}>
+    {$widgetStore.typing}
+  </div>
 </div>
 
 <style lang="postcss">
+  .cw-typing {
+    font-size: 0.688rem;
+    color: #666666;
+    padding: 15px;
+    width: 100%;
+    background-color: #fbfcfe;
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    display: none;
+    transition: all 250ms ease-in-out;
+    opacity: 0.9;
+  }
+
+  .cw-typing-show {
+    display: block;
+  }
+
   .cw-message-list {
     display: flex;
     flex-direction: column;
@@ -72,6 +94,7 @@
     overflow-y: auto;
     min-height: calc(100% - 145px);
     max-height: calc(100% - 145px);
+    position: relative;
   }
 
   .cw-message-list-inner {

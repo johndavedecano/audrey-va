@@ -13,6 +13,8 @@
 
   $: session = $widgetStore.session;
 
+  $: widget = $widgetStore.widget;
+
   const onSendMessage = async () => {
     try {
       if (value !== "") {
@@ -27,6 +29,12 @@
 
         widgetStore.addMessage(message);
 
+        if (session.current_target === "va") {
+          setTimeout(() => {
+            widgetStore.addTyping(`${widget.bot_name} is typing...`);
+          }, 500);
+        }
+
         value = "";
 
         const params = {
@@ -36,6 +44,10 @@
         };
 
         await axios.post("/widget/message", params);
+
+        if (session.current_target === "va") {
+          widgetStore.hideTyping();
+        }
       }
     } catch (error) {
       console.error(error);
