@@ -104,7 +104,6 @@ function AudreyWidget() {
   };
 
   const onPostMessage = (event) => {
-    console.log(event.data);
     if (event.data === "cw-minimize") onMinimized();
   };
 
