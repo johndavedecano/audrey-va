@@ -8,19 +8,19 @@
   import PageHead from "$lib/components/PageHead.svelte";
   import PageMain from "$lib/components/PageMain.svelte";
   import TableDropdown from "$lib/components/TableDropdown.svelte";
+  import widgetsStore from "$lib/stores/widgets.store";
 
-  let items = [];
   let widget = {};
   let embed = false;
+
+  $: items = $widgetsStore;
 
   const onAddNew = () => goto("/widgets/create");
 
   const loadItems = () => {
     axios
       .get("/widgets/all")
-      .then((response) => {
-        items = response.data.data;
-      })
+      .then((response) => widgetsStore.set(response.data.data))
       .catch((error) => {
         alert(error.message);
       });
