@@ -31,7 +31,7 @@
 
         if (session.current_target === "va") {
           setTimeout(() => {
-            widgetStore.addTyping(`${widget.bot_name} is typing...`);
+            widgetStore.addTyping(`${widget.bot_name} is thinking...`);
           }, 500);
         }
 
