@@ -1,5 +1,6 @@
 // @ts-nocheck
 import {
+  createCustomerListener,
   createMessageListener,
   createSessionListener,
   groupMessages,
@@ -12,6 +13,7 @@ import moment from "moment";
 
 const WidgetStore = () => {
   const store = writable({
+    sessionId: localStorage.getItem("sessionId"),
     session: {},
     messages: [],
     added: [],
@@ -20,9 +22,32 @@ const WidgetStore = () => {
     widget: {},
     loading: false,
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
+    customer: {},
   });
 
-  let messageSubscriber, sessionSubscriber;
+  let messageSubscriber, sessionSubscriber, customerSubscriber;
+
+  const endSession = () => {
+    store.update((state) => ({
+      ...state,
+      messages: [],
+      added: [],
+      sessionId: null,
+      session: {},
+    }));
+  };
+
+  const setSessionId = (sessionId) => {
+    if (sessionId) {
+      localStorage.setItem("sessionId", sessionId);
+    } else {
+      localStorage.removeItem("sessionId");
+    }
+    store.update((state) => ({
+      ...state,
+      sessionId,
+    }));
+  };
 
   const addTyping = (author, username, message) => {
     store.update((state) => {
@@ -91,6 +116,13 @@ const WidgetStore = () => {
     }));
   };
 
+  const setCustomer = (customer) => {
+    store.update((state) => ({
+      ...state,
+      customer,
+    }));
+  };
+
   const toggleMenu = (nextState) => {
     store.update((state) => ({
       ...state,
@@ -113,17 +145,44 @@ const WidgetStore = () => {
     }));
   };
 
+  const addCustomerListener = (organizationId, customerId) => {
+    if (typeof customerSubscriber === "function") customerSubscriber();
+    customerSubscriber = createCustomerListener(
+      organizationId,
+      customerId,
+      (doc) => {
+        if (doc.exists()) {
+          store.update((state) => {
+            return {
+              ...state,
+              customer: {
+                id: doc.id,
+                ...state.customer,
+                ...doc.data(),
+              },
+            };
+          });
+        } else {
+          console.log("Document does not exist");
+        }
+      }
+    );
+  };
+
   const addMessageListener = (sessionId, callback = () => {}) => {
+    if (typeof messageSubscriber === "function") messageSubscriber();
     messageSubscriber = createMessageListener(sessionId, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const message = { id: change.doc.id, ...change.doc.data() };
           store.update((state) => {
-            if (!state.added.includes(message.id)) {
-              return {
-                ...state,
-                messages: groupMessages([...state.messages, message]),
-              };
+            if (state.isLoggedIn && state.sessionId) {
+              if (!state.added.includes(message.id)) {
+                return {
+                  ...state,
+                  messages: groupMessages([...state.messages, message]),
+                };
+              }
             }
             return state;
           });
@@ -133,31 +192,27 @@ const WidgetStore = () => {
     });
   };
 
-  const removeMessageListener = () => {
-    if (typeof messageSubscriber === "function") messageSubscriber();
-  };
-
   const addSessionListener = (sessionId) => {
+    if (typeof sessionSubscriber === "function") sessionSubscriber();
     sessionSubscriber = createSessionListener(sessionId, (doc) => {
       if (doc.exists()) {
         store.update((state) => {
-          return {
-            ...state,
-            session: {
-              session_id: sessionId,
-              ...state.session,
-              ...doc.data(),
-            },
-          };
+          if (state.isLoggedIn && state.sessionId) {
+            return {
+              ...state,
+              session: {
+                session_id: sessionId,
+                ...state.session,
+                ...doc.data(),
+              },
+            };
+          }
+          return state;
         });
       } else {
         console.log("Document does not exist");
       }
     });
-  };
-
-  const removeSessionListener = () => {
-    if (typeof sessionSubscriber === "function") sessionSubscriber();
   };
 
   const addMessage = (message) => {
@@ -173,9 +228,8 @@ const WidgetStore = () => {
   return {
     ...store,
     addMessageListener,
-    removeMessageListener,
     addSessionListener,
-    removeSessionListener,
+    addCustomerListener,
     toggleSound,
     toggleMenu,
     addMessage,
@@ -184,6 +238,9 @@ const WidgetStore = () => {
     setLoggedIn,
     addTyping,
     hideTyping,
+    setSessionId,
+    endSession,
+    setCustomer,
   };
 };
 

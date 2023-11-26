@@ -13,6 +13,7 @@
 
   const onEndChat = () => {
     widgetStore.toggleMenu();
+    widgetStore.endSession();
   };
 
   const onToggleSound = () => {

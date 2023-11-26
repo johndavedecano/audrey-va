@@ -22,6 +22,19 @@ export const createSessionListener = (sessionId, callback) => {
   return onSnapshot(q, callback);
 };
 
+export const createCustomerListener = (
+  organizationId,
+  customerId,
+  callback
+) => {
+  const customerRef = doc(
+    db,
+    `/organizations/${organizationId}/customers/${customerId}`
+  );
+  const q = query(customerRef);
+  return onSnapshot(q, callback);
+};
+
 export const groupMessages = (items) => {
   const grouped = [];
   for (let i = 0; i < items.length; i++) {

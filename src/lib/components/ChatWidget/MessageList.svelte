@@ -5,17 +5,26 @@
   import widgetStore from "$lib/stores/widget.store";
 
   let distance = false;
-  let wrapper;
+  let wrapper, timeout;
 
   $: isLoggedIn = $widgetStore.isLoggedIn;
+
+  $: sessionId = $widgetStore.sessionId;
 
   $: widget = $widgetStore.widget;
 
   $: messages = $widgetStore.messages;
 
+  $: active = isLoggedIn && sessionId;
+
   const scroll = (node) => {
+    let scrollTimeout;
     const func = () => {
-      distance = node.scrollHeight - node.scrollTop - node.clientHeight;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(
+        () =>
+          (distance = node.scrollHeight - node.scrollTop - node.clientHeight)
+      );
     };
 
     node.addEventListener("scroll", func);
@@ -27,21 +36,25 @@
     };
   };
 
-  let timeout;
-
   const scrollToBottom = () => {
     if (wrapper) {
       clearTimeout(timeout);
-      timeout = setTimeout(() => (wrapper.scrollTop = wrapper.scrollHeight));
+      timeout = setTimeout(() => {
+        if (distance <= 60) {
+          wrapper.scrollTop = wrapper.scrollHeight;
+        }
+      });
     }
   };
 
-  $: if (messages.length && distance <= 60) scrollToBottom();
+  $: len = messages.length;
+
+  $: if (len) scrollToBottom();
 </script>
 
 <div class="cw-message-list" bind:this={wrapper} use:scroll>
   <div class="cw-message-list-inner">
-    {#if isLoggedIn}
+    {#if active}
       {#each messages as message}
         <Message {message} {widget} />
       {/each}
@@ -66,6 +79,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    scroll-behavior: smooth;
   }
 
   /* For WebKit browsers */

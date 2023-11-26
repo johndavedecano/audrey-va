@@ -2,12 +2,16 @@
   // @ts-nocheck
   import { signInWithCustomToken } from "firebase/auth";
   import { errorMessage } from "$lib/string";
+  import { auth } from "$lib/firebase";
 
+  import axios from "axios";
   import widgetStore from "$lib/stores/widget.store";
 
   $: loading = $widgetStore.loading;
 
   $: widget = $widgetStore.widget;
+
+  $: isLoggedIn = $widgetStore.isLoggedIn;
 
   let values = {
     email: "johndavedecano@gmail.com",
@@ -16,18 +20,33 @@
     message: "welcome_message",
   };
 
+  const onMessageUpdate = () => {};
+
+  const onSessionUpdate = () => {};
+
+  const onSessionCreated = (sessionId) => {
+    widgetStore.setLoading(false);
+    widgetStore.setSessionId(sessionId);
+    widgetStore.addMessageListener(sessionId, onMessageUpdate);
+    widgetStore.addSessionListener(sessionId, onSessionUpdate);
+  };
+
+  const getParameters = () => {
+    return {
+      email: values.email,
+      phone: values.phone,
+      name: values.name,
+      message: values.message,
+      organization_id: widget.organization,
+      widget_id: widget.id,
+    };
+  };
+
   const startSession = async () => {
     try {
       widgetStore.setLoading(true);
 
-      const params = {
-        email: values.email,
-        phone: values.phone,
-        name: values.name,
-        message: values.message,
-        organization_id: widget.organization,
-        widget_id: widget.id,
-      };
+      const params = getParameters();
 
       const response = await axios.post("/widget/session", params);
 
@@ -35,11 +54,9 @@
 
       await signInWithCustomToken(auth, data.token);
 
-      localStorage.setItem("session_id", data.session_id);
-
       widgetStore.setLoggedIn(true);
 
-      widgetStore.setLoading(false);
+      onSessionCreated(data.session_id);
     } catch (error) {
       widgetStore.setLoading(false);
 
@@ -48,11 +65,35 @@
       alert(errorMessage(error));
     }
   };
+
+  const resetSession = async () => {
+    try {
+      widgetStore.setLoading(true);
+
+      const params = getParameters();
+
+      params.id_token = await auth.currentUser.getIdToken();
+
+      const response = await axios.post("/widget/session_new", params);
+
+      const data = response.data.data;
+
+      onSessionCreated(data.session_id);
+    } catch (error) {
+      widgetStore.setLoading(false);
+
+      console.error(error);
+
+      alert(errorMessage(error));
+    }
+  };
+
+  const onSubmit = () => (isLoggedIn ? resetSession() : startSession());
 </script>
 
 <div class="cw-message-form-wrapper">
   <div class="cw-message-form">
-    <form action="" on:submit|preventDefault={startSession}>
+    <form action="" on:submit|preventDefault={onSubmit}>
       <p class="cw-welcome-message">
         {widget.welcome_message}
       </p>

@@ -18,51 +18,47 @@
 
   $: session = $widgetStore.session;
 
+  $: sessionId = $widgetStore.sessionId;
+
+  $: active = sessionId && isLoggedIn;
+
+  const onLogout = () => {
+    widgetStore.setLoggedIn(false);
+    widgetStore.setSessionId(null);
+  };
+
+  const onLoggedIn = (user) => {
+    widgetStore.setLoggedIn(true);
+    widgetStore.addCustomerListener(user.uid, widget.organization);
+  };
+
   const onMessageUpdate = () => {};
 
   const onSessionUpdate = () => {};
 
-  const setListeners = () => {
-    const sessionId = localStorage.getItem("session_id");
+  const setEventListeners = () => {
     widgetStore.addMessageListener(sessionId, onMessageUpdate);
     widgetStore.addSessionListener(sessionId, onSessionUpdate);
   };
 
-  const removeListeners = () => {
-    widgetStore.removeMessageListener();
-    widgetStore.removeSessionListener();
-  };
-
-  const onLogout = () => {
-    widgetStore.setLoggedIn(false);
-    localStorage.removeItem("session_id");
-    removeListeners();
-  };
-
-  const onLoggedIn = () => {
-    widgetStore.setLoggedIn(true);
-    setListeners();
-  };
-
   onMount(() => {
+    if (active) setEventListeners();
+
     onAuthStateChanged(auth, (user) => {
-      const sessionId = localStorage.getItem("session_id");
-      if (user && sessionId) {
-        onLoggedIn();
+      if (user) {
+        onLoggedIn(user);
       } else {
         onLogout();
       }
     });
   });
-
-  onDestroy(() => removeListeners());
 </script>
 
 <Portal target="body">
   <div class="cw" style={variables}>
     <Header {widget} />
     <MessageList></MessageList>
-    {#if isLoggedIn}
+    {#if active}
       <MessageControls />
     {/if}
   </div>
