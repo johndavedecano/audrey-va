@@ -1,6 +1,6 @@
 <script>
   // @ts-nocheck
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { auth } from "$lib/firebase";
   import { onAuthStateChanged } from "firebase/auth";
 
