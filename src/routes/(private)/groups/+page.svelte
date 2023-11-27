@@ -1,20 +1,67 @@
 <script>
   // @ts-nocheck
-
+  import axios from "axios";
   import PageHead from "$lib/components/PageHead.svelte";
   import PageMain from "$lib/components/PageMain.svelte";
+  import GroupModal from "./(components)/GroupModal.svelte";
+  import TableActions from "$lib/components/TableActions.svelte";
 
   import { groups } from "$lib/stores/groups.store";
-  import { IconPaint } from "@tabler/icons-svelte";
-  import GroupModal from "./(components)/GroupModal.svelte";
+  import { onMount } from "svelte";
+  import { errorMessage } from "$lib/string";
+
+  import {
+    IconEdit,
+    IconPaint,
+    IconSettings,
+    IconTrash,
+  } from "@tabler/icons-svelte";
 
   $: items = $groups;
 
   let modal;
 
+  let loading;
+
   const onAddNew = () => {
     modal.open({});
   };
+
+  const loadGroups = async () => {
+    try {
+      loading = true;
+
+      const response = await axios
+        .get("/groups/index")
+        .then((response) => response.data.data);
+
+      groups.set(response);
+
+      loading = false;
+    } catch (error) {
+      loading = false;
+      alert(errorMessage(error));
+    }
+  };
+
+  const onAction = (action, item) => {
+    console.log(action, item);
+  };
+
+  const actions = [
+    {
+      icon: IconEdit,
+      label: "Settings",
+      action: "settings",
+    },
+    {
+      icon: IconTrash,
+      label: "Archive",
+      action: "archive",
+    },
+  ];
+
+  onMount(() => loadGroups());
 </script>
 
 <GroupModal bind:this={modal} />
@@ -30,16 +77,26 @@
       <table class="table">
         <thead>
           <tr>
-            <td>Name</td>
-            <td />
+            <th>Name</th>
+            <th>Timezone</th>
+            <th>Enabled</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {#each items as item}
             <tr>
               <td>{item.name}</td>
+              <td>{item.timezone}</td>
               <td>{item.enabled ? "Yes" : "No"}</td>
-              <td class="text-right"> test </td>
+              <td class="text-right">
+                <TableActions
+                  {actions}
+                  on:action={(evt) => onAction(evt.detail, item)}
+                >
+                  <IconSettings />
+                </TableActions>
+              </td>
             </tr>
           {/each}
         </tbody>

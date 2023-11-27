@@ -1,11 +1,16 @@
 <script>
   // @ts-nocheck
   import Timezones from "$lib/components/Timezones.svelte";
+  import { errorMessage } from "$lib/string";
+  import axios from "axios";
   import { createEventDispatcher } from "svelte";
 
   let modal;
 
-  let value = {
+  let loading = false;
+
+  const initialValue = {
+    id: null,
     name: "",
     enabled: false,
     timezone: "",
@@ -48,9 +53,40 @@
     },
   };
 
+  let value = { ...initialValue };
+
   const dispatch = createEventDispatcher();
 
-  const onSubmit = () => {};
+  const createGroup = () => {
+    return axios.post("/groups", { ...value, id: undefined });
+  };
+
+  const updateGroup = () => {
+    return axios.post(`/groups/${value.id}`, { ...value, id: undefined });
+  };
+
+  const onSubmit = async () => {
+    try {
+      loading = true;
+
+      if (value.id) {
+        await updateGroup();
+      } else {
+        await createGroup();
+      }
+
+      loading = false;
+
+      close();
+
+      dispatch("refresh");
+
+      value = initialValue;
+    } catch (error) {
+      loading = false;
+      alert(errorMessage(error));
+    }
+  };
 
   export const open = (item = {}) => {
     value = { ...value, ...item };
@@ -77,12 +113,13 @@
           class="input input-bordered w-full"
           bind:value={value.name}
           required
+          disabled={loading}
         />
       </div>
 
       <div class="form-control w-full mb-4">
         <label class="label" for="timezone"> Timezone</label>
-        <Timezones bind:value={value.timezone} />
+        <Timezones bind:value={value.timezone} disabled={loading} />
       </div>
 
       <div class="form-control w-full mb-4">
@@ -94,6 +131,7 @@
                 type="checkbox"
                 class="checkbox checkbox-primary"
                 bind:checked={value.schedules[key].enabled}
+                disabled={loading}
               />
               <span class="uppercase font-bold">
                 {key}
@@ -105,12 +143,14 @@
                 type="time"
                 class="input input-bordered w-full time"
                 bind:value={value.schedules[key].start}
+                disabled={loading}
               />
               <input
                 name="name"
                 type="time"
                 class="input input-bordered w-full time"
                 bind:value={value.schedules[key].end}
+                disabled={loading}
               />
             </div>
           </div>
@@ -125,12 +165,15 @@
             type="checkbox"
             checked="checked"
             class="checkbox checkbox-primary"
+            disabled={loading}
           />
           <span class="label-text">Enable</span>
         </label>
         <div class="flex-1"></div>
-        <button class="btn" type="button">Cancel</button>
-        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn" type="button" disabled={loading}>Cancel</button>
+        <button class="btn btn-primary" type="submit" disabled={loading}
+          >Save</button
+        >
       </div>
     </form>
   </div>
