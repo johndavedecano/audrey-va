@@ -2,6 +2,7 @@
 import { db } from "$lib/server/firebase.js";
 import { json } from "@sveltejs/kit";
 import Joi from "joi";
+import moment from "moment";
 
 export async function GET({ cookies }) {
   try {
@@ -48,6 +49,45 @@ export async function POST({ request, cookies }) {
 
     const schema = Joi.object({
       name: Joi.string().required(),
+      timezone: Joi.string().required(),
+      schedules: Joi.object({
+        monday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        tuesday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        wednesday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        thursday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        friday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        saturday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        sunday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+      }).required(),
+      enabled: Joi.boolean().required(),
     });
 
     const validate = schema.validate(body);
@@ -75,6 +115,11 @@ export async function POST({ request, cookies }) {
       .collection("groups")
       .add({
         name: body.name,
+        timezone: body.timezone,
+        schedules: body.schedules,
+        enabled: body.enabled,
+        created_at: moment().valueOf(),
+        updated_at: moment().valueOf(),
       });
 
     return json({

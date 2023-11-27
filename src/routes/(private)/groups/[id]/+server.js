@@ -47,6 +47,45 @@ export async function POST({ request, cookies, params }) {
 
     const schema = Joi.object({
       name: Joi.string().required(),
+      timezone: Joi.string().required(),
+      schedules: Joi.object({
+        monday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        tuesday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        wednesday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        thursday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        friday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        saturday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+        sunday: Joi.object({
+          enabled: Joi.boolean().required(),
+          start: Joi.string().allow(null, ""),
+          end: Joi.string().allow(null, ""),
+        }).required(),
+      }).required(),
+      enabled: Joi.boolean().required(),
     });
 
     const validate = schema.validate(body);
@@ -75,6 +114,10 @@ export async function POST({ request, cookies, params }) {
       .doc(params.id)
       .update({
         name: body.name,
+        timezone: body.timezone,
+        schedules: body.schedules,
+        enabled: body.enabled,
+        updated_at: moment().valueOf(),
       });
 
     return json({
