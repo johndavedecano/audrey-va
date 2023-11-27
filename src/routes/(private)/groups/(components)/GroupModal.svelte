@@ -1,9 +1,10 @@
 <script>
   // @ts-nocheck
-  import Timezones from "$lib/components/Timezones.svelte";
-  import { errorMessage } from "$lib/string";
-  import axios from "axios";
   import { createEventDispatcher } from "svelte";
+  import { errorMessage } from "$lib/string";
+  import Timezones from "$lib/components/Timezones.svelte";
+  import axios from "axios";
+  import pick from "lodash/pick";
 
   let modal;
 
@@ -17,52 +18,66 @@
     schedules: {
       monday: {
         enabled: true,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       tuesday: {
         enabled: true,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       wednesday: {
         enabled: true,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       thursday: {
         enabled: true,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       friday: {
         enabled: true,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       saturday: {
         enabled: false,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
       sunday: {
         enabled: false,
-        start: null,
-        end: null,
+        start: "09:00",
+        end: "17:00",
       },
     },
   };
+
+  const days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
   let value = { ...initialValue };
 
   const dispatch = createEventDispatcher();
 
   const createGroup = () => {
-    return axios.post("/groups", { ...value, id: undefined });
+    const params = pick(value, Object.keys(initialValue));
+    delete params.id;
+    return axios.post("/groups", params);
   };
 
   const updateGroup = () => {
-    return axios.post(`/groups/${value.id}`, { ...value, id: undefined });
+    const params = pick(value, Object.keys(initialValue));
+    delete params.id;
+    return axios.post(`/groups/${value.id}`, params);
   };
 
   const onSubmit = async () => {
@@ -96,6 +111,7 @@
 
   export const close = () => {
     modal.close();
+    value = { ...initialValue };
     dispatch("closed ");
   };
 </script>
@@ -124,7 +140,7 @@
 
       <div class="form-control w-full mb-4">
         <label class="label" for="schedules"> Schedules</label>
-        {#each Object.keys(value.schedules) as key}
+        {#each days as key}
           <div class="flex items-center mb-2">
             <div class="flex flex-1 gap-4 items-center">
               <input
@@ -163,14 +179,16 @@
         >
           <input
             type="checkbox"
-            checked="checked"
             class="checkbox checkbox-primary"
             disabled={loading}
+            bind:checked={value.enabled}
           />
           <span class="label-text">Enable</span>
         </label>
         <div class="flex-1"></div>
-        <button class="btn" type="button" disabled={loading}>Cancel</button>
+        <button class="btn" type="button" on:click={close} disabled={loading}
+          >Cancel</button
+        >
         <button class="btn btn-primary" type="submit" disabled={loading}
           >Save</button
         >

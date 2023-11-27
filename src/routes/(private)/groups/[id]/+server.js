@@ -1,7 +1,9 @@
 // @ts-nocheck
 import { db } from "$lib/server/firebase.js";
 import { json, error } from "@sveltejs/kit";
+
 import Joi from "joi";
+import moment from "moment";
 
 export async function GET({ cookies, params }) {
   try {
@@ -137,7 +139,7 @@ export async function POST({ request, cookies, params }) {
   }
 }
 
-export async function DELETE({ request, cookies, params }) {
+export async function DELETE({ cookies, params }) {
   try {
     const uid = cookies.get("uid");
     const userRef = await db.collection("users").doc(uid).get();

@@ -44,8 +44,34 @@
     }
   };
 
+  const onDeleteItem = async (item) => {
+    const conf = window.confirm("are you sure you want to delete this item?");
+    if (conf) {
+      try {
+        loading = true;
+
+        await axios.delete(`/groups/${item.id}`);
+
+        loading = false;
+
+        loadGroups();
+      } catch (error) {
+        loading = false;
+        alert(errorMessage(error));
+      }
+    }
+  };
+
   const onAction = (action, item) => {
     console.log(action, item);
+    switch (action) {
+      case "settings":
+        modal.open(item);
+        break;
+      case "archive":
+        onDeleteItem(item);
+        break;
+    }
   };
 
   const actions = [
@@ -64,7 +90,7 @@
   onMount(() => loadGroups());
 </script>
 
-<GroupModal bind:this={modal} />
+<GroupModal bind:this={modal} on:refresh={loadGroups} />
 
 <PageMain>
   <PageHead
