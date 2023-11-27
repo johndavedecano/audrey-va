@@ -5,6 +5,8 @@
 
   import {
     IconApi,
+    IconCalendar,
+    IconClock,
     IconCode,
     IconDotsVertical,
     IconEyeCode,
@@ -68,18 +70,34 @@
       </a>
       <a
         class="dropdown-item"
-        on:click|preventDefault={() => onActionClick("dialogflow")}
+        on:click|preventDefault={() => onActionClick("schedules")}
         href="/"
       >
-        <IconApi size={16} /> Dialogflow
+        <IconCalendar size={16} /> Schedules
+      </a>
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("maintenance")}
+        href="/"
+      >
+        <IconClock size={16} /> Maintenance
       </a>
       <a
         class="dropdown-item"
         on:click|preventDefault={() => onActionClick("settings")}
         href="/"
       >
-        <IconSettings size={16} /> Settings
+        <IconSettings size={16} /> Appreance
       </a>
+
+      <a
+        class="dropdown-item"
+        on:click|preventDefault={() => onActionClick("dialogflow")}
+        href="/"
+      >
+        <IconApi size={16} /> Dialogflow
+      </a>
+
       <a
         class="dropdown-item"
         on:click|preventDefault={() => onActionClick("code")}
@@ -92,7 +110,7 @@
         on:click|preventDefault={() => onActionClick("delete")}
         href="/"
       >
-        <IconTrash size={16} /> Delete Widget
+        <IconTrash size={16} /> Archive
       </a>
     </div>
   </div>

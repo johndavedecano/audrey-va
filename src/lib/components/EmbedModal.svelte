@@ -1,12 +1,15 @@
 <script>
   // @ts-nocheck
   import { PUBLIC_APP_URL } from "$env/static/public";
+  import { IconCopy } from "@tabler/icons-svelte";
 
   let widget = {};
 
   let modal;
 
   let site_url = PUBLIC_APP_URL;
+
+  let textarea;
 
   $: code = [
     "<script>",
@@ -26,12 +29,12 @@
     "<\/script>",
   ].join("");
 
-  const onCopy = (evt) => {
-    evt.target.select();
+  const onCopy = () => {
+    textarea.select();
     try {
       // Execute the copy command
       document.execCommand("copy");
-      alert("Text has been copied to the clipboard!");
+      alert("Embed code has been copied to the clipboard!");
     } catch (err) {
       console.error("Unable to copy text to the clipboard", err);
     }
@@ -49,13 +52,22 @@
   <div class="modal-box">
     <div class="text-lg font-bold mb-4">Embed Code</div>
     <textarea
+      bind:this={textarea}
       name="dialogflow_private_key"
       class="textarea textarea-bordered w-full"
       bind:value={code}
       required
       rows="15"
       readonly
-      on:click={onCopy}
     />
+
+    <div class="flex items-center gap-4 pt-4">
+      <div class="flex-1"></div>
+      <button class="btn" on:click={close}> Close </button>
+      <button class="btn btn-primary" on:click={onCopy}>
+        <IconCopy />
+        Copy Code
+      </button>
+    </div>
   </div>
 </dialog>
