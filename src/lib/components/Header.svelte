@@ -3,6 +3,8 @@
 
   import ToggleIcon from "$lib/components/ToggleIcon.svelte";
 
+  export let hideToggle = false;
+
   const onToggle = () => {
     SidebarStore.update((v) => {
       return {
@@ -13,13 +15,15 @@
 </script>
 
 <header class="header">
-  <ToggleIcon on:toggle={onToggle} />
+  {#if !hideToggle}
+    <ToggleIcon on:toggle={onToggle} />
+  {/if}
   <slot />
 </header>
 
 <style lang="postcss">
   .header {
-    @apply flex items-center bg-white px-4 sticky top-0 z-10 shadow-sm lg:shadow-none;
+    @apply flex items-center bg-white px-4 sticky top-0 z-10 shadow-sm lg:shadow-none border-b;
     min-height: 60px;
   }
 </style>

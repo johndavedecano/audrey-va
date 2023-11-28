@@ -47,7 +47,7 @@
 </script>
 
 <button
-  class="btn bg-transparent border-none"
+  class="btn btn-link"
   on:click|stopPropagation={toggle}
   bind:this={button}
 >
