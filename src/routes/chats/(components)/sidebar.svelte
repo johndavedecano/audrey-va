@@ -3,13 +3,14 @@
 
   import TableActions from "$lib/components/TableActions.svelte";
   import {
-    IconChevronLeft,
+    IconChevronRight,
     IconClock,
+    IconFilter,
     IconMessage,
     IconSearch,
     IconSettings,
-    IconStatusChange,
     IconUsersGroup,
+    IconX,
   } from "@tabler/icons-svelte";
 
   const onAction = (action) => {};
@@ -37,7 +38,7 @@
   <div class="sidebar-top">
     <div class="sidebar-header">
       <a href="/dashboard" class="btn btn-link">
-        <IconChevronLeft size={24} />
+        <IconX size={24} />
       </a>
       <div class="flex-1">
         <div class="text-lg font-bold text-gray-700">Live Chats</div>
@@ -53,6 +54,9 @@
         placeholder="Search Chats"
         class="input input-sm w-full max-w-xs"
       />
+      <a href="/dashboard" class="btn btn-link" title="Change Status">
+        <IconFilter size={24} />
+      </a>
     </div>
   </div>
   <div class="sidebar-content">fdsfdsfdsf</div>
@@ -69,8 +73,8 @@
       <div class="text-sm font-bold text-black">John Dave Decano</div>
       <div class="text-xs text-gray-500">Ready</div>
     </div>
-    <a href="/dashboard" class="btn btn-link px-2" title="Change Status">
-      <IconStatusChange size={24} />
+    <a href="/dashboard" class="btn btn-link" title="Filter">
+      <IconChevronRight size={24} />
     </a>
   </div>
 </div>
@@ -85,7 +89,7 @@
     min-height: 60px;
   }
   .sidebar-search {
-    @apply border-b flex items-center px-6 gap-4;
+    @apply border-b flex items-center pl-4 gap-2;
     min-height: 60px;
   }
   .sidebar-content {
