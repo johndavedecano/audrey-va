@@ -7,9 +7,6 @@ import {
 } from "$lib/chat";
 
 import { writable } from "svelte/store";
-import { v4 } from "uuid";
-
-import moment from "moment";
 
 const WidgetStore = () => {
   const store = writable({
