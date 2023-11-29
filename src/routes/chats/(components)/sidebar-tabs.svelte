@@ -9,6 +9,6 @@
       >Active</a
     >
     <!-- svelte-ignore a11y-missing-attribute -->
-    <a role="tab" class="flex-1 bg-gray-50 tab">Completed</a>
+    <a role="tab" class="flex-1 bg-gray-50 tab">Closed</a>
   </div>
 </div>
