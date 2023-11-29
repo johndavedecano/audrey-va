@@ -1,4 +1,6 @@
 <script>
+  import { IconFile, IconPhoto, IconSend } from "@tabler/icons-svelte";
+
   const items = Array.from(new Array(100));
 </script>
 
@@ -50,13 +52,34 @@
       {/each}
     </div>
   </div>
-  <div class="current-chat-controls">ewrewrew</div>
+  <div class="typing">
+    <div class="typing-inner">seiji is typing...</div>
+  </div>
+  <div class="current-chat-controls">
+    <div class="controls">
+      <a href="/" class="btn btn-link">
+        <IconPhoto size={16} />
+      </a>
+      <a href="/" class="btn btn-link">
+        <IconFile size={16} />
+      </a>
+    </div>
+    <div class="textinput">
+      <textarea></textarea>
+    </div>
+    <div class="actions">
+      <a href="/" class="btn btn-link">
+        <IconSend size={16} />
+      </a>
+    </div>
+  </div>
 </div>
 
 <style lang="postcss">
   .current-chat {
-    @apply flex flex-col bg-white flex-1;
+    @apply flex flex-col bg-white flex-1 relative;
     min-height: calc(100vh - 60px);
+    min-width: 500px;
   }
 
   .current-chat-header {
@@ -65,17 +88,44 @@
   }
 
   .current-chat-message-list {
-    @apply flex flex-col flex-1 overflow-y-auto;
-    height: calc(100vh - 268px);
-    max-height: calc(100vh - 268px);
+    @apply overflow-y-auto relative;
+    height: calc(100vh - 220px);
+    max-height: calc(100vh - 220px);
+    padding-bottom: 60px;
   }
 
   .current-chat-message-list-inner {
-    @apply flex flex-col p-4;
+    @apply flex flex-col p-4 mx-auto;
+    max-width: 800px;
+    width: 100%;
   }
 
   .current-chat-controls {
     @apply flex items-center border-t;
-    min-height: 100px;
+    min-height: 60px;
+  }
+
+  .controls {
+    @apply flex px-2;
+  }
+
+  .textinput {
+    @apply flex-1 flex flex-col items-center justify-center;
+  }
+
+  .textinput textarea {
+    @apply w-full border-none p-2 resize-none box-border bg-gray-100 rounded-lg outline-none text-sm text-gray-700;
+    height: 40px;
+  }
+
+  .typing {
+    @apply bg-white px-4 py-1 justify-center flex items-center text-sm text-gray-500 absolute w-full italic;
+    bottom: 60px;
+  }
+
+  .typing-inner {
+    @apply flex flex-col mx-auto;
+    max-width: 800px;
+    width: 100%;
   }
 </style>
