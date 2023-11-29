@@ -3,6 +3,7 @@
   <div class="content">
     <slot name="content" />
   </div>
+  <slot name="right" />
 </div>
 
 <style lang="postcss">

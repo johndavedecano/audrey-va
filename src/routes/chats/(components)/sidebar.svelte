@@ -23,8 +23,4 @@
     width: 360px;
     @apply h-screen flex flex-col bg-white border-r;
   }
-  .sidebar-content {
-    @apply flex flex-1 flex-col;
-    max-height: calc(100% - 180px);
-  }
 </style>
