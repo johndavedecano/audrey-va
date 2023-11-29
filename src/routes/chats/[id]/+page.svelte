@@ -40,7 +40,7 @@
             Anakin
             <time class="text-xs opacity-50">12:46</time>
           </div>
-          <div class="chat-bubble">
+          <div class="chat-bubble bg-gray-50 text-black">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
             eget libero non elit posuere vehicula. Fusce sodales vestibulum
             lectus, nec imperdiet risus.
