@@ -5,7 +5,18 @@
 </script>
 
 <div class="current-chat">
-  <div class="current-chat-header">dsfdsfdsf</div>
+  <div class="current-chat-header">
+    <div class="current-chat-info">
+      <div class="avatar online">
+        <div class="w-12 rounded-full">
+          <img
+            alt=""
+            src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="current-chat-message-list">
     <div class="current-chat-message-list-inner">
       {#each items as item}
@@ -112,6 +123,10 @@
   .current-chat-controls {
     @apply flex items-center border-t;
     min-height: 60px;
+  }
+
+  .current-chat-info {
+    @apply px-4;
   }
 
   .controls {
