@@ -1,5 +1,14 @@
 <script>
-  import { IconFile, IconPhoto, IconSend } from "@tabler/icons-svelte";
+  import {
+    IconChevronDown,
+    IconDots,
+    IconFile,
+    IconMoodSmile,
+    IconPhoto,
+    IconSend,
+    IconTransfer,
+    IconUsersGroup,
+  } from "@tabler/icons-svelte";
 
   const items = Array.from(new Array(100));
 </script>
@@ -15,6 +24,15 @@
           />
         </div>
       </div>
+      <div class="current-chat-customer">
+        <div class="text-base font-bold">John Dave Decano</div>
+        <div class="text-sm text-gray-500">Last message at 24 hours ago</div>
+      </div>
+    </div>
+    <div class="pr-4 flex gap-2">
+      <a href="/" class="btn btn-circle btn-sm">
+        <IconDots size={16} />
+      </a>
     </div>
   </div>
   <div class="current-chat-message-list">
@@ -91,6 +109,9 @@
       <a href="/" class="btn btn-link">
         <IconSend size={16} />
       </a>
+      <a href="/" class="btn btn-link">
+        <IconMoodSmile size={16} />
+      </a>
     </div>
   </div>
 </div>
@@ -126,7 +147,11 @@
   }
 
   .current-chat-info {
-    @apply px-4;
+    @apply px-4 flex gap-2 flex-1;
+  }
+
+  .current-chat-customer {
+    @apply flex flex-col flex-1;
   }
 
   .controls {
