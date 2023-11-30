@@ -22,7 +22,7 @@
             Obi-Wan Kenobi
             <time class="text-xs opacity-50">12:45</time>
           </div>
-          <div class="chat-bubble">
+          <div class="chat-bubble bg-purple-100 text-black">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
             eget libero non elit posuere vehicula. Fusce sodales vestibulum
             lectus, nec imperdiet risus.
@@ -42,11 +42,20 @@
             Anakin
             <time class="text-xs opacity-50">12:46</time>
           </div>
-          <div class="chat-bubble bg-gray-50 text-black">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-            eget libero non elit posuere vehicula. Fusce sodales vestibulum
-            lectus, nec imperdiet risus.
+          <div class="flex flex-col items-end gap-2">
+            <div class="chat-bubble bg-gray-50 text-black">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+              eget libero non elit posuere vehicula. Fusce sodales vestibulum
+              lectus, nec imperdiet risus.
+            </div>
+
+            <div class="chat-bubble bg-gray-50 text-black">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+              eget libero non elit posuere vehicula. Fusce sodales vestibulum
+              lectus, nec imperdiet risus.
+            </div>
           </div>
+
           <div class="chat-footer opacity-50">Seen at 12:46</div>
         </div>
       {/each}
@@ -119,7 +128,7 @@
   }
 
   .typing {
-    @apply bg-white px-4 py-1 justify-center flex items-center text-sm text-gray-500 absolute w-full italic;
+    @apply px-4 pointer-events-none bg-purple-50 py-1 justify-center flex items-center text-sm text-gray-500 absolute w-full italic;
     bottom: 60px;
   }
 
