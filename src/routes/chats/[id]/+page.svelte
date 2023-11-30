@@ -1,13 +1,11 @@
 <script>
   import {
-    IconChevronDown,
     IconDots,
     IconFile,
     IconMoodSmile,
     IconPhoto,
+    IconSearch,
     IconSend,
-    IconTransfer,
-    IconUsersGroup,
   } from "@tabler/icons-svelte";
 
   const items = Array.from(new Array(100));
@@ -30,6 +28,9 @@
       </div>
     </div>
     <div class="pr-4 flex gap-2">
+      <a href="/" class="btn btn-circle btn-sm">
+        <IconSearch size={16} />
+      </a>
       <a href="/" class="btn btn-circle btn-sm">
         <IconDots size={16} />
       </a>
