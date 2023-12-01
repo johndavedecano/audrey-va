@@ -6,6 +6,7 @@ const ChatStore = () => {
     sessions: [],
     conversation: {},
     tab: "active",
+    info: true,
   });
 
   const setActiveTab = (tab) => {
@@ -15,9 +16,17 @@ const ChatStore = () => {
     }));
   };
 
+  const toggleInfo = () => {
+    return store.update((state) => ({
+      ...state,
+      info: !state.info,
+    }));
+  };
+
   return {
     ...store,
     setActiveTab,
+    toggleInfo,
   };
 };
 

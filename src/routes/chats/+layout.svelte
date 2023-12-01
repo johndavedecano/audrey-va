@@ -8,7 +8,7 @@
   import { SvelteEasyToast } from "svelte-easy-toast";
 
   import Sidebar from "./(components)/sidebar.svelte";
-  import ChatInfo from "./(components)/chat-info.svelte";
+
   export let data;
 </script>
 
@@ -21,7 +21,6 @@
     </Header>
     <div class="flex">
       <slot />
-      <ChatInfo />
     </div>
   </svelte:fragment>
 </Wrapper>

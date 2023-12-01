@@ -3,6 +3,7 @@
   import ChatHeader from "../(components)/chat-header.svelte";
   import ChatTyping from "../(components)/chat-typing.svelte";
   import ChatMessageList from "../(components)/chat-message-list.svelte";
+  import ChatInfo from "../(components)/chat-info.svelte";
   import Chat from "../(components)/chat.svelte";
 </script>
 
@@ -12,3 +13,4 @@
   <ChatTyping />
   <ChatControls />
 </Chat>
+<ChatInfo />

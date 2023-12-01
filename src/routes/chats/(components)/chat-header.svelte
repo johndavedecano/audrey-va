@@ -1,5 +1,15 @@
 <script>
-  import { IconDots, IconSearch } from "@tabler/icons-svelte";
+  import chatStore from "$lib/stores/chat.store";
+  import {
+    IconClock,
+    IconDots,
+    IconQuestionMark,
+    IconSearch,
+  } from "@tabler/icons-svelte";
+
+  const onToggleInfo = () => {
+    chatStore.toggleInfo();
+  };
 </script>
 
 <div class="current-chat-header">
@@ -18,10 +28,18 @@
     </div>
   </div>
   <div class="pr-4 flex gap-2">
+    <div class="flex-1"></div>
+    <a href="/" class="btn btn-circle btn-sm">
+      <IconQuestionMark size={16} />
+    </a>
     <a href="/" class="btn btn-circle btn-sm">
       <IconSearch size={16} />
     </a>
-    <a href="/" class="btn btn-circle btn-sm">
+    <a
+      href="/"
+      class="btn btn-circle btn-sm"
+      on:click|preventDefault={onToggleInfo}
+    >
       <IconDots size={16} />
     </a>
   </div>
