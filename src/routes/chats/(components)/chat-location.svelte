@@ -20,5 +20,7 @@
       <div class="text-purple-500 text-sm">Asia/Manila</div>
     </div>
   </div>
-  <img src="/map.png" alt="" />
+  <div class="py-4">
+    <img src="/map.png" alt="" />
+  </div>
 </div>

@@ -14,29 +14,16 @@
   import ChatLocation from "./chat-location.svelte";
   import ChatAttributes from "./chat-attributes.svelte";
   import ChatRating from "./chat-rating.svelte";
+  import ChatActions from "./chat-actions.svelte";
+  import ChatTime from "./chat-time.svelte";
 
   // @ts-nocheck
   $: open = $chatStore.info;
 </script>
 
 <div class="chat-info" class:chat-info-show={open}>
-  <div class="text-center font-bold py-4 text-4xl">
-    12:00<br />
-
-    <div class="text-gray-400 text-base flex items-center justify-center">
-      <span class="flex gap-2"> <IconClock /> Handling Time</span>
-    </div>
-  </div>
-  <div
-    class="p-2 w-full border-b border-t flex items-center gap-2 justify-center"
-  >
-    <button class="btn flex-1 btn-success text-white btn-sm">
-      <IconChevronRight size={16} /> Transfer
-    </button>
-    <button class="btn flex-1 btn-sm btn-error text-white">
-      <IconX size={16} /> Close Chat
-    </button>
-  </div>
+  <ChatTime />
+  <ChatActions />
   <ChatTabs />
   <div class="flex flex-col gap-2 pt-4">
     <ChatAttributes />
