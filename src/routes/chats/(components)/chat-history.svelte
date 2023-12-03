@@ -4,7 +4,7 @@
   const items = Array.from(new Array(25));
 </script>
 
-<div class="flex flex-col gap-4 p-4">
+<div class="flex flex-col gap-4 p-4 history-list">
   {#each items as item}
     <div class="flex gap-1 flex-col w-full">
       <div
@@ -21,3 +21,9 @@
     </div>
   {/each}
 </div>
+
+<style lang="postcss">
+  .history-list {
+    overflow-y: auto;
+  }
+</style>

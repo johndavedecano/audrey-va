@@ -18,6 +18,7 @@
   import ChatTime from "./chat-time.svelte";
   import ChatSession from "./chat-session.svelte";
   import ChatHistory from "./chat-history.svelte";
+  import ChatNotes from "./chat-notes.svelte";
 
   // @ts-nocheck
   $: open = $chatStore.info;
@@ -28,7 +29,8 @@
   <ChatActions />
   <ChatTabs />
   <!-- <ChatSession /> -->
-  <ChatHistory />
+  <!-- <ChatHistory /> -->
+  <ChatNotes />
 </div>
 
 <style>
