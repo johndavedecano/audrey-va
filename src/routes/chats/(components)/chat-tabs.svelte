@@ -35,7 +35,7 @@
     role="tab"
     on:click={() => setChatTab("attachments")}
     class="tab flex-1"
-    class:active={active === "attachments"}>Attachments</a
+    class:active={active === "attachments"}>Attachment</a
   >
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
