@@ -7,12 +7,20 @@ const ChatStore = () => {
     conversation: {},
     tab: "active",
     info: true,
+    chatTab: "session",
   });
 
   const setActiveTab = (tab) => {
     return store.update((state) => ({
       ...state,
       tab,
+    }));
+  };
+
+  const setChatTab = (chatTab) => {
+    return store.update((state) => ({
+      ...state,
+      chatTab,
     }));
   };
 
@@ -26,6 +34,7 @@ const ChatStore = () => {
   return {
     ...store,
     setActiveTab,
+    setChatTab,
     toggleInfo,
   };
 };
