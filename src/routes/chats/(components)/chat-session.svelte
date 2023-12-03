@@ -6,7 +6,7 @@
   import ChatRating from "./chat-rating.svelte";
 </script>
 
-<div class="flex flex-col gap-2 pt-4">
+<div class="flex flex-col gap-2 pt-4 overflow-y-auto">
   <ChatAttributes />
   <ChatRating />
   <ChatMembers />

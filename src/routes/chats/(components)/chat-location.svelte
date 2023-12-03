@@ -20,7 +20,39 @@
       <div class="text-purple-500 text-sm">Asia/Manila</div>
     </div>
   </div>
-  <div class="py-4">
-    <img src="/map.png" alt="" />
+</div>
+
+<div class="py-4">
+  <div
+    style="text-decoration:none; margin:auto; overflow:hidden;max-width:100%;width:400px;height:300px;"
+  >
+    <div id="gmap-canvas" style="height:100%; width:100%;max-width:100%;">
+      <iframe
+        style="height:100%;width:100%;border:0;"
+        frameborder="0"
+        src="https://www.google.com/maps/embed/v1/place?q=Breda,+Netherlands&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
+      ></iframe>
+    </div>
+    <a
+      class="google-maps-html"
+      rel="nofollow"
+      href="https://www.bootstrapskins.com/themes"
+      id="get-map-data">premium bootstrap themes</a
+    ><style>
+      #gmap-canvas img {
+        max-width: none !important;
+        background: none !important;
+        font-size: inherit;
+        font-weight: inherit;
+      }
+    </style>
   </div>
 </div>
+
+<style>
+  img {
+    max-width: 95%;
+    height: auto;
+    margin: auto;
+  }
+</style>

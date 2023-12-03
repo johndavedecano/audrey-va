@@ -20,25 +20,37 @@
   import ChatHistory from "./chat-history.svelte";
   import ChatNotes from "./chat-notes.svelte";
   import ChatCustomer from "./chat-customer.svelte";
+  import ChatAttachments from "./chat-attachments.svelte";
 
   // @ts-nocheck
   $: open = $chatStore.info;
+
+  $: active = $chatStore.chatTab;
 </script>
 
 <div class="chat-info" class:chat-info-show={open}>
   <ChatTime />
   <ChatActions />
   <ChatTabs />
-  <!-- <ChatSession /> -->
-  <!-- <ChatHistory /> -->
-  <!-- <ChatNotes /> -->
-  <ChatCustomer />
+  {#if active === "session"}
+    <ChatSession />
+  {:else if active === "history"}
+    <ChatHistory />
+  {:else if active === "notes"}
+    <ChatNotes />
+  {:else if active === "attachments"}
+    <ChatAttachments />
+  {:else if active === "customer"}
+    <ChatCustomer />
+  {:else}
+    <div>not selected</div>
+  {/if}
 </div>
 
 <style>
   .chat-info {
     @apply h-full hidden flex-col bg-white border-l overflow-y-auto;
-    min-width: 360px;
+    min-width: 486px;
     height: calc(100vh - 61px);
     max-height: calc(100vh - 61px);
   }
