@@ -8,12 +8,8 @@
     IconUserEdit,
     IconX,
   } from "@tabler/icons-svelte";
-  import ChatMembers from "./chat-members.svelte";
+
   import ChatTabs from "./chat-tabs.svelte";
-  import ChatUserAgent from "./chat-user-agent.svelte";
-  import ChatLocation from "./chat-location.svelte";
-  import ChatAttributes from "./chat-attributes.svelte";
-  import ChatRating from "./chat-rating.svelte";
   import ChatActions from "./chat-actions.svelte";
   import ChatTime from "./chat-time.svelte";
   import ChatSession from "./chat-session.svelte";
@@ -49,7 +45,7 @@
 
 <style>
   .chat-info {
-    @apply h-full hidden flex-col bg-white border-l overflow-y-auto;
+    @apply h-full hidden flex-col bg-white border-l overflow-hidden;
     min-width: 486px;
     height: calc(100vh - 61px);
     max-height: calc(100vh - 61px);

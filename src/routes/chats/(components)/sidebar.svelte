@@ -21,6 +21,6 @@
 <style>
   .sidebar {
     width: 360px;
-    @apply h-screen flex flex-col bg-white border-r;
+    @apply h-screen flex flex-col bg-white border-r z-20;
   }
 </style>

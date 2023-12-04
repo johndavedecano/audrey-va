@@ -1,8 +1,11 @@
 <script>
+  import ChatSearch from "./chat-search.svelte";
+
   const items = Array.from(new Array(100));
 </script>
 
 <div class="current-chat-message-list">
+  <ChatSearch />
   <div class="current-chat-message-list-inner">
     {#each items as item}
       <div class="chat chat-start">

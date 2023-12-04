@@ -10,6 +10,10 @@
   const onToggleInfo = () => {
     chatStore.toggleInfo();
   };
+
+  const onToggleSearch = () => {
+    chatStore.toggleChatSearch();
+  };
 </script>
 
 <div class="current-chat-header">
@@ -32,7 +36,11 @@
     <a href="/" class="btn btn-circle btn-sm">
       <IconQuestionMark size={16} />
     </a>
-    <a href="/" class="btn btn-circle btn-sm">
+    <a
+      href="/"
+      class="btn btn-circle btn-sm"
+      on:click|preventDefault={onToggleSearch}
+    >
       <IconSearch size={16} />
     </a>
     <a

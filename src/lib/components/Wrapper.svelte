@@ -12,6 +12,7 @@
   }
 
   .content {
-    @apply flex flex-col flex-1 relative max-h-screen h-screen overflow-y-auto;
+    @apply flex flex-col flex-1 relative max-h-screen h-screen overflow-y-auto ml-auto;
+    padding-top: 60px;
   }
 </style>

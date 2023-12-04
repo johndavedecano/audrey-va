@@ -23,7 +23,7 @@
 
 <style lang="postcss">
   .header {
-    @apply flex items-center bg-white px-4 sticky top-0 z-10 shadow-sm lg:shadow-none border-b;
+    @apply flex items-center bg-white px-4 absolute w-full top-0 z-10 shadow-sm lg:shadow-none border-b;
     min-height: 60px;
   }
 </style>
