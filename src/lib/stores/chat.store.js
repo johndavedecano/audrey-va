@@ -9,6 +9,7 @@ const ChatStore = () => {
     info: true,
     chatTab: "session",
     chatSearch: false,
+    chatKnowledge: false,
   });
 
   const setActiveTab = (tab) => {
@@ -39,12 +40,20 @@ const ChatStore = () => {
     }));
   };
 
+  const toggleChatKnowledge = () => {
+    return store.update((state) => ({
+      ...state,
+      chatKnowledge: !state.chatKnowledge,
+    }));
+  };
+
   return {
     ...store,
     setActiveTab,
     setChatTab,
     toggleInfo,
     toggleChatSearch,
+    toggleChatKnowledge,
   };
 };
 

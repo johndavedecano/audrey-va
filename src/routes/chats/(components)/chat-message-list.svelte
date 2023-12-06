@@ -1,4 +1,5 @@
 <script>
+  import ChatKnowledge from "./chat-knowledge.svelte";
   import ChatSearch from "./chat-search.svelte";
 
   const items = Array.from(new Array(100));
@@ -6,6 +7,7 @@
 
 <div class="current-chat-message-list">
   <ChatSearch />
+  <ChatKnowledge />
   <div class="current-chat-message-list-inner">
     {#each items as item}
       <div class="chat chat-start">

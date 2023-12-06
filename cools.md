@@ -1,0 +1,3 @@
+- generate and send AI image
+- send generated message as audio
+- 

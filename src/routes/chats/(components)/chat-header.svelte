@@ -14,6 +14,10 @@
   const onToggleSearch = () => {
     chatStore.toggleChatSearch();
   };
+
+  const onToggleKnowledge = () => {
+    chatStore.toggleChatKnowledge();
+  };
 </script>
 
 <div class="current-chat-header">
@@ -33,7 +37,11 @@
   </div>
   <div class="pr-4 flex gap-2">
     <div class="flex-1"></div>
-    <a href="/" class="btn btn-circle btn-sm">
+    <a
+      href="/"
+      class="btn btn-circle btn-sm"
+      on:click|preventDefault={onToggleKnowledge}
+    >
       <IconQuestionMark size={16} />
     </a>
     <a

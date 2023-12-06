@@ -3,7 +3,7 @@ import { db } from "$lib/server/firebase.js";
 import { json } from "@sveltejs/kit";
 
 /**
- * Get session
+ * Get message
  * @param {*} param0
  * @returns
  */
@@ -27,7 +27,7 @@ export async function GET({ params }) {
 }
 
 /**
- * Send session
+ * Send message
  * @param {*} param0
  * @returns
  */
@@ -51,7 +51,7 @@ export async function POST({ params }) {
 }
 
 /**
- * Close session
+ * Close message
  * @param {*} param0
  * @returns
  */
@@ -75,7 +75,7 @@ export async function DELETE({ params }) {
 }
 
 /**
- * Update session
+ * Update message
  * @param {*} param0
  * @returns
  */
