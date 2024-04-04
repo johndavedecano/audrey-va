@@ -68,7 +68,7 @@
       >
         <IconEyeCode size={16} /> View Widget
       </a>
-      <a
+      <!-- <a
         class="dropdown-item"
         on:click|preventDefault={() => onActionClick("schedules")}
         href="/"
@@ -81,7 +81,7 @@
         href="/"
       >
         <IconClock size={16} /> Maintenance
-      </a>
+      </a> -->
       <a
         class="dropdown-item"
         on:click|preventDefault={() => onActionClick("settings")}

@@ -1,38 +1,42 @@
-# create-svelte
+# Audrey VA
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Audrey VA enables you to create multiple chat widgets to embed to your website and integrate to your dialogflow bot.
 
-## Creating a project
+![My Image](https://raw.github.com/johndavedecano/audrey-va/main/screenshot.png)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Audrey VA is built using SvelteKit and Firebase. Make sure you have NodeJS installed to your machine and you have a Firebase account.
 
-# create a new project in my-app
-npm create svelte@latest my-app
+1. Clone the repo and install depedencies
+
+```
+git clone git@github.com:johndavedecano/audrey-va.git
+cd audrey-va
+npm install
 ```
 
-## Developing
+2. Create a .env file with the following details
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```
+PUBLIC_FIREBASE_API_KEY=
+PUBLIC_FIREBASE_AUTH_DOMAIN=
+PUBLIC_FIREBASE_PROJECT_ID=
+PUBLIC_FIREBASE_STORAGE_BUCKET=
+PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+PUBLIC_FIREBASE_APP_ID=
+PUBLIC_APP_URL=http://localhost:5174
+FIREBASE_SERVICE_ACCOUNT_KEY=''
+ADMINISTRATORS='[]'
+JWT_SECRET_KEY=
+```
 
-```bash
+3. Spin up the DEV server
+
+```
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Support
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+I am open to work right now. Please contact me.

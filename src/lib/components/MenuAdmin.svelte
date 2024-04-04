@@ -48,6 +48,12 @@
     >
   </li>
   <li>
+    <a on:click={onClick} href="/widgets" class:active={isActive("/widgets")}>
+      <IconWallpaper size={16} />
+      Widgets</a
+    >
+  </li>
+  <!-- <li>
     <a on:click={onClick} href="/chats" class:active={isActive("/chats")}>
       <IconMessage size={16} />
       <div class="flex-1">Live Chats</div>
@@ -59,14 +65,14 @@
       <IconHelp size={16} />
       Tickets</a
     >
-  </li>
-  <li>
+  </li> -->
+  <!-- <li>
     <a on:click={onClick} href="/widgets" class:active={isActive("/widgets")}>
       <IconWallpaper size={16} />
       Widgets</a
     >
-  </li>
-  <li>
+  </li> -->
+  <!-- <li>
     <a on:click={onClick} href="/groups" class:active={isActive("/groups")}>
       <IconUsersGroup size={16} />
       Groups</a
@@ -79,17 +85,11 @@
     >
   </li>
   <li>
-    <a on:click={onClick} href="/settings" class:active={isActive("/settings")}>
-      <IconCode size={16} />
-      Integration</a
-    >
-  </li>
-  <li>
     <a on:click={onClick} href="/account" class:active={isActive("/account")}>
       <IconLock size={16} />
       Account</a
     >
-  </li>
+  </li> -->
   <li>
     <a
       on:click={onClick}
